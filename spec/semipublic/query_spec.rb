@@ -130,11 +130,25 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'include?' do
-        it 'should be awesome'
+      describe 'Array#include?' do
+        before :all do
+          @return = @query.filter { |u| [ 1, 2 ].include?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+        end
       end
 
-      describe 'nil?' do
+      describe 'receiver.method.nil?' do
         it 'should be awesome'
       end
     end
@@ -330,6 +344,9 @@ describe DataMapper::Ambition::Query do
         it 'should be awesome'
       end
 
+      describe 'none' do
+        it 'should be awesome'
+      end
     end
   end
 end
