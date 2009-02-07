@@ -1,0 +1,14 @@
+History.txt
+LICENSE
+Manifest.txt
+README.txt
+Rakefile
+TODO
+dm-ambition.gemspec
+lib/dm-ambition.rb
+lib/dm-ambition/version.rb
+spec/spec.opts
+spec/spec_helper.rb
+tasks/hoe.rb
+tasks/install.rb
+tasks/spec.rb
