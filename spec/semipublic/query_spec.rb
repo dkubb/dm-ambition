@@ -140,6 +140,26 @@ describe DataMapper::Ambition::Query do
     end
 
     describe 'with value' do
+      describe 'local variable' do
+        before :all do
+          name = 'Dan Kubb'
+
+          @return = @query.filter { |u| u.name == name }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+        end
+      end
+
       describe 'instance variable' do
         before :all do
           @name = 'Dan Kubb'

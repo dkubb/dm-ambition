@@ -37,14 +37,14 @@ module DataMapper
           end
 
           # process the reciever
-          process(exp.shift)
+          @receiver = process(exp.shift)
 
           # process the body
           process(exp.shift)
         end
 
         def process_lasgn(exp)
-          @receiver = exp.shift
+          exp.shift
         end
 
         def process_call(exp)
