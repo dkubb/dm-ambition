@@ -1,12 +1,9 @@
 require 'pathname'
 require 'rubygems'
 
-gem 'extlib', '~>0.9.11'
-require 'extlib'
+dir = Pathname(__FILE__).dirname.expand_path + 'dm-ambition'
 
-dir = Pathname(__FILE__).dirname.expand_path / 'dm-ambition'
-
-require dir / 'version'
+require dir + 'version'
 
 #gem 'dm-core', DataMapper::Ambition::VERSION
 require 'dm-core'

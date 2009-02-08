@@ -12,9 +12,14 @@ AUTHOR           = 'Dan Kubb'
 EMAIL            = 'dan.kubb [a] gmail [d] com'
 GEM_NAME         = 'dm-ambition'
 GEM_VERSION      = DataMapper::Ambition::VERSION
-GEM_DEPENDENCIES = [ [ 'dm-core', GEM_VERSION ] ]
-GEM_CLEAN        = %w[ log pkg coverage ]
-GEM_EXTRAS       = { :has_rdoc => true, :extra_rdoc_files => %w[ README.txt LICENSE TODO History.txt ] }
+GEM_DEPENDENCIES = [
+  [ 'dm-core',   GEM_VERSION ],
+  [ 'ParseTree', '~>3.0.2'   ],
+  [ 'ruby2ruby', '~>1.2.1'   ],
+]
+
+GEM_CLEAN  = %w[ log pkg coverage ]
+GEM_EXTRAS = { :has_rdoc => true, :extra_rdoc_files => %w[ README.txt LICENSE TODO History.txt ] }
 
 PROJECT_NAME        = 'dm-ambition'
 PROJECT_URL         = "http://github.com/dkubb/#{GEM_NAME}"
