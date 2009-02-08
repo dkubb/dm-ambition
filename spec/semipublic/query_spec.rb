@@ -220,6 +220,78 @@ describe DataMapper::Ambition::Query do
         end
       end
 
+      describe 'Hash#key?' do
+        before :all do
+          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.key?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+        end
+      end
+
+      describe 'Hash#has_key?' do
+        before :all do
+          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.has_key?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+        end
+      end
+
+      describe 'Hash#include?' do
+        before :all do
+          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.include?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+        end
+      end
+
+      describe 'Hash#member?' do
+        before :all do
+          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.member?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+        end
+      end
+
       describe 'receiver.method.nil?' do
         it 'should be awesome'
       end

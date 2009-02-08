@@ -176,6 +176,17 @@ module DataMapper
           array
         end
 
+        def process_hash(exp)
+          hash = {}
+          until exp.empty?
+            key   = process(exp.shift)
+            value = process(exp.shift)
+
+            hash[key] = value
+          end
+          hash
+        end
+
         def process_str(exp)
           exp.shift
         end
