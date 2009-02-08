@@ -4,13 +4,18 @@
 module DataMapper
   module Ambition
     module Collection
+      def self.included(base)
+        base.send(:alias_method, :find_all, :select)
+        base.send(:alias_method, :find,     :detect)
+      end
+
       # TODO: add empty?
       # TODO: add any?  (handle with and without block)
       # TODO: add all?  (handle with and without block)
       # TODO: add none? (handle with and without block) (add to LazyArray for < 1.9)
       # TODO: add one?  (handle with and without block) (add to LazyArray for < 1.9)
 
-      # TODO: spec and document this
+      # TODO: document this
       # @api public
       def select(&block)
         query = self.query.filter(&block)
@@ -22,9 +27,7 @@ module DataMapper
         end
       end
 
-      alias find_all select
-
-      # TODO: spec and document this
+      # TODO: document this
       # @api public
       def detect(&block)
         if loaded?
@@ -34,9 +37,7 @@ module DataMapper
         end
       end
 
-      alias find detect
-
-      # TODO: spec and document this
+      # TODO: document this
       # @api public
       def reject(&block)
         query = self.query.filter(true, &block)
