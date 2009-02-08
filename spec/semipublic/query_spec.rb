@@ -166,6 +166,60 @@ describe DataMapper::Ambition::Query do
         end
       end
 
+      describe 'Range#include?' do
+        before :all do
+          @return = @query.filter { |u| (1..2).include?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
+        end
+      end
+
+      describe 'Range#member?' do
+        before :all do
+          @return = @query.filter { |u| (1..2).member?(u.id) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
+        end
+      end
+
+      describe 'Range#===' do
+        before :all do
+          @return = @query.filter { |u| (1..2) === u.id }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
+        end
+      end
+
       describe 'receiver.method.nil?' do
         it 'should be awesome'
       end

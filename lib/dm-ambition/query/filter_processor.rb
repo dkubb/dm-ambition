@@ -99,9 +99,15 @@ module DataMapper
             #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
 
             case lhs
-              when Array, Range
+              when Array
                 case operator
                   when :include?, :member?
+                    operator = :==
+                end
+
+              when Range
+                case operator
+                  when :include?, :member?, :===
                     operator = :==
                 end
 
