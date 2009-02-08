@@ -16,15 +16,17 @@ describe DataMapper::Ambition::Query do
     @repository = DataMapper.repository(:default)
     @model      = User
     @query      = DataMapper::Query.new(@repository, @model)
+
+    @subject = @query
   end
 
-  it { @query.should respond_to(:filter) }
+  it { @subject.should respond_to(:filter) }
 
   describe '#filter' do
     describe 'with operator' do
       describe '==' do
         before :all do
-          @return = @query.filter { |u| u.name == 'Dan Kubb' }
+          @return = @subject.filter { |u| u.name == 'Dan Kubb' }
         end
 
         it 'should return a Query' do
@@ -32,7 +34,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -42,7 +44,7 @@ describe DataMapper::Ambition::Query do
 
       describe '=~' do
         before :all do
-          @return = @query.filter { |u| u.name =~ 'Dan Kubb' }
+          @return = @subject.filter { |u| u.name =~ 'Dan Kubb' }
         end
 
         it 'should return a Query' do
@@ -50,7 +52,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -60,7 +62,7 @@ describe DataMapper::Ambition::Query do
 
       describe '>' do
         before :all do
-          @return = @query.filter { |u| u.id > 1 }
+          @return = @subject.filter { |u| u.id > 1 }
         end
 
         it 'should return a Query' do
@@ -68,7 +70,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -78,7 +80,7 @@ describe DataMapper::Ambition::Query do
 
       describe '>=' do
         before :all do
-          @return = @query.filter { |u| u.id >= 1 }
+          @return = @subject.filter { |u| u.id >= 1 }
         end
 
         it 'should return a Query' do
@@ -86,7 +88,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -96,7 +98,7 @@ describe DataMapper::Ambition::Query do
 
       describe '<' do
         before :all do
-          @return = @query.filter { |u| u.id < 1 }
+          @return = @subject.filter { |u| u.id < 1 }
         end
 
         it 'should return a Query' do
@@ -104,7 +106,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -114,7 +116,7 @@ describe DataMapper::Ambition::Query do
 
       describe '<=' do
         before :all do
-          @return = @query.filter { |u| u.id <= 1 }
+          @return = @subject.filter { |u| u.id <= 1 }
         end
 
         it 'should return a Query' do
@@ -122,7 +124,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -132,7 +134,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Array#include?' do
         before :all do
-          @return = @query.filter { |u| [ 1, 2 ].include?(u.id) }
+          @return = @subject.filter { |u| [ 1, 2 ].include?(u.id) }
         end
 
         it 'should return a Query' do
@@ -140,7 +142,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -150,7 +152,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Array#member?' do
         before :all do
-          @return = @query.filter { |u| [ 1, 2 ].member?(u.id) }
+          @return = @subject.filter { |u| [ 1, 2 ].member?(u.id) }
         end
 
         it 'should return a Query' do
@@ -158,7 +160,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -168,7 +170,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Range#include?' do
         before :all do
-          @return = @query.filter { |u| (1..2).include?(u.id) }
+          @return = @subject.filter { |u| (1..2).include?(u.id) }
         end
 
         it 'should return a Query' do
@@ -176,7 +178,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -186,7 +188,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Range#member?' do
         before :all do
-          @return = @query.filter { |u| (1..2).member?(u.id) }
+          @return = @subject.filter { |u| (1..2).member?(u.id) }
         end
 
         it 'should return a Query' do
@@ -194,7 +196,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -204,7 +206,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Range#===' do
         before :all do
-          @return = @query.filter { |u| (1..2) === u.id }
+          @return = @subject.filter { |u| (1..2) === u.id }
         end
 
         it 'should return a Query' do
@@ -212,7 +214,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -222,7 +224,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#key?' do
         before :all do
-          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.key?(u.id) }
+          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.key?(u.id) }
         end
 
         it 'should return a Query' do
@@ -230,7 +232,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -240,7 +242,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#has_key?' do
         before :all do
-          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.has_key?(u.id) }
+          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.has_key?(u.id) }
         end
 
         it 'should return a Query' do
@@ -248,7 +250,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -258,7 +260,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#include?' do
         before :all do
-          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.include?(u.id) }
+          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.include?(u.id) }
         end
 
         it 'should return a Query' do
@@ -266,7 +268,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -276,7 +278,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#member?' do
         before :all do
-          @return = @query.filter { |u| { 1 => '1', 2 => '2' }.member?(u.id) }
+          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.member?(u.id) }
         end
 
         it 'should return a Query' do
@@ -284,7 +286,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -294,7 +296,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#value?' do
         before :all do
-          @return = @query.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
+          @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
         end
 
         it 'should return a Query' do
@@ -302,7 +304,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -312,7 +314,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Hash#has_value?' do
         before :all do
-          @return = @query.filter { |u| { '1' => 1, '2' => 2 }.has_value?(u.id) }
+          @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.has_value?(u.id) }
         end
 
         it 'should return a Query' do
@@ -320,7 +322,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -330,7 +332,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'receiver.method.nil?' do
         before :all do
-          @return = @query.filter { |u| u.id.nil? }
+          @return = @subject.filter { |u| u.id.nil? }
         end
 
         it 'should return a Query' do
@@ -338,7 +340,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -353,7 +355,7 @@ describe DataMapper::Ambition::Query do
         before :all do
           name = 'Dan Kubb'
 
-          @return = @query.filter { |u| u.name == name }
+          @return = @subject.filter { |u| u.name == name }
         end
 
         it 'should return a Query' do
@@ -361,7 +363,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -373,7 +375,7 @@ describe DataMapper::Ambition::Query do
         before :all do
           @name = 'Dan Kubb'
 
-          @return = @query.filter { |u| u.name == @name }
+          @return = @subject.filter { |u| u.name == @name }
         end
 
         it 'should return a Query' do
@@ -381,7 +383,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -393,7 +395,7 @@ describe DataMapper::Ambition::Query do
         before :all do
           $name = 'Dan Kubb'
 
-          @return = @query.filter { |u| u.name == $name }
+          @return = @subject.filter { |u| u.name == $name }
         end
 
         it 'should return a Query' do
@@ -401,7 +403,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -415,7 +417,7 @@ describe DataMapper::Ambition::Query do
         end
 
         before :all do
-          @return = @query.filter { |u| u.name == name }
+          @return = @subject.filter { |u| u.name == name }
         end
 
         it 'should return a Query' do
@@ -423,7 +425,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -437,7 +439,7 @@ describe DataMapper::Ambition::Query do
         NAME = 'Dan Kubb'
 
         before :all do
-          @return = @query.filter { |u| u.name == NAME }
+          @return = @subject.filter { |u| u.name == NAME }
         end
 
         it 'should return a Query' do
@@ -445,7 +447,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -455,7 +457,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'nil' do
         before :all do
-          @return = @query.filter { |u| u.name == nil }
+          @return = @subject.filter { |u| u.name == nil }
         end
 
         it 'should return a Query' do
@@ -463,7 +465,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -473,7 +475,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'true' do
         before :all do
-          @return = @query.filter { |u| u.admin == true }
+          @return = @subject.filter { |u| u.admin == true }
         end
 
         it 'should return a Query' do
@@ -481,7 +483,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -491,7 +493,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'false' do
         before :all do
-          @return = @query.filter { |u| u.admin == false }
+          @return = @subject.filter { |u| u.admin == false }
         end
 
         it 'should return a Query' do
@@ -499,7 +501,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -509,7 +511,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'Regexp' do
         before :all do
-          @return = @query.filter { |u| u.name =~ /Dan Kubb/ }
+          @return = @subject.filter { |u| u.name =~ /Dan Kubb/ }
         end
 
         it 'should return a Query' do
@@ -517,7 +519,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -532,7 +534,7 @@ describe DataMapper::Ambition::Query do
             Name = 'Dan Kubb'
           end
 
-          @return = @query.filter { |u| u.name == Condition::Name }
+          @return = @subject.filter { |u| u.name == Condition::Name }
         end
 
         it 'should return a Query' do
@@ -540,7 +542,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -557,7 +559,7 @@ describe DataMapper::Ambition::Query do
             end
           end
 
-          @return = @query.filter { |u| u.name == Condition::name }
+          @return = @subject.filter { |u| u.name == Condition::name }
         end
 
         it 'should return a Query' do
@@ -565,7 +567,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -578,7 +580,7 @@ describe DataMapper::Ambition::Query do
     describe 'with conditions' do
       describe 'ANDed' do
         before :all do
-          @return = @query.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
+          @return = @subject.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
         end
 
         it 'should return a Query' do
@@ -586,7 +588,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -599,7 +601,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'negated' do
         before :all do
-          @return = @query.filter { |u| !(u.id == 1) }
+          @return = @subject.filter { |u| !(u.id == 1) }
         end
 
         it 'should return a Query' do
@@ -607,7 +609,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -617,7 +619,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'double-negated' do
         before :all do
-          @return = @query.filter { |u| !(!(u.id == 1)) }
+          @return = @subject.filter { |u| !(!(u.id == 1)) }
         end
 
         it 'should return a Query' do
@@ -625,7 +627,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not equal(@query)
+          @return.should_not equal(@subject)
         end
 
         it 'should set conditions' do
@@ -635,7 +637,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'none' do
         before :all do
-          @return = @query.filter { |u| }
+          @return = @subject.filter { |u| }
         end
 
         it 'should return a Query' do
@@ -643,7 +645,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should return a copy of self' do
-          @return.should == @query
+          @return.should == @subject
         end
 
         it 'should not set conditions' do

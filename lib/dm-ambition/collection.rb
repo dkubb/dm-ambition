@@ -23,7 +23,17 @@ module DataMapper
         if loaded?
           new_collection(query, super)
         else
-          all(query)
+          collection = all(query)
+
+          if head.any?
+            collection.unshift(*head.select(&block))
+          end
+
+          if tail.any?
+            collection.concat(tail.select(&block))
+          end
+
+          collection
         end
       end
 
@@ -33,7 +43,7 @@ module DataMapper
         if loaded?
           super
         else
-          first(query.filter(&block))
+          head.detect(&block) || first(query.filter(&block))
         end
       end
 
@@ -45,7 +55,17 @@ module DataMapper
         if loaded?
           new_collection(query, super)
         else
-          all(query)
+          collection = all(query)
+
+          if head.any?
+            collection.unshift(*head.reject(&block))
+          end
+
+          if tail.any?
+            collection.concat(tail.reject(&block))
+          end
+
+          collection
         end
       end
     end # module Collection

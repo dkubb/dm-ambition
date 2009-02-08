@@ -15,6 +15,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
         property :name,  String
         property :admin, Boolean
       end
+
+      if DataMapper.respond_to?(:auto_migrate!)
+        DataMapper.auto_migrate!
+      end
     end
 
     before :all do
@@ -23,17 +27,122 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
       @query      = DataMapper::Query.new(@repository, @model)
       @collection = DataMapper::Collection.new(@query)
 
+      @user  = @model.create(:name => 'Dan Kubb',  :admin => true)
+      @other = @model.create(:name => 'Sam Smoot', :admin => true)
+
       @collection.to_a if loaded
 
       @subject = @collection
     end
 
-    before :all do
-      DataMapper.auto_migrate!
-
-      @user = @model.create(:name => 'Dan Kubb')
-    end
-
     it_should_behave_like 'it has public filter methods'
+
+    unless loaded
+      [ :select, :find_all ].each do |method|
+        describe "##{method}", '(unloaded)' do
+          describe 'when matching resource prepended' do
+            before :all do
+              @subject.unshift(@other)
+              @return = @subject.send(method) { |u| u.admin == true }
+            end
+
+            it 'should return a Collection' do
+              @return.should be_kind_of(DataMapper::Collection)
+            end
+
+            it 'should not return self' do
+              @return.should_not equal(@subject)
+            end
+
+            it 'should not be a kicker' do
+              pending 'TODO: make Collection#equal not a kicker' do
+                @return.should_not be_loaded
+              end
+            end
+
+            it 'should return expected values' do
+              @return.should == [ @other, @user ]
+            end
+          end
+
+          describe 'when matching resource appended' do
+            before :all do
+              @subject << @other
+              @return = @subject.send(method) { |u| u.admin == true }
+            end
+
+            it 'should return a Collection' do
+              @return.should be_kind_of(DataMapper::Collection)
+            end
+
+            it 'should not return self' do
+              @return.should_not equal(@subject)
+            end
+
+            it 'should not be a kicker' do
+              pending 'TODO: make Collection#equal not a kicker' do
+                @return.should_not be_loaded
+              end
+            end
+
+            it 'should return expected values' do
+              @return.should == [ @user, @other ]
+            end
+          end
+        end
+      end
+
+      describe '#reject', '(unloaded)' do
+        describe 'when matching resource prepended' do
+          before :all do
+            @subject.unshift(@other)
+            @return = @subject.reject { |u| u.admin != true }
+          end
+
+          it 'should return a Collection' do
+            @return.should be_kind_of(DataMapper::Collection)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should not be a kicker' do
+            pending 'TODO: make Collection#equal not a kicker' do
+              @return.should_not be_loaded
+            end
+          end
+
+          it 'should return expected values' do
+            @return.should == [ @other, @user ]
+          end
+        end
+
+        describe 'when matching resource appended' do
+          before :all do
+            @subject << @other
+            @return = @subject.reject { |u| u.admin != true }
+          end
+
+          it 'should return a Collection' do
+            @return.should be_kind_of(DataMapper::Collection)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should not be a kicker' do
+            pending 'TODO: make Collection#equal not a kicker' do
+              @return.should_not be_loaded
+            end
+          end
+
+          it 'should return expected values' do
+            @return.should == [ @user, @other ]
+          end
+        end
+      end
+    end
   end
 end
