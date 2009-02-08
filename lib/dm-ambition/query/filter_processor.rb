@@ -32,9 +32,8 @@ module DataMapper
         end
 
         def process_iter(exp)
-          if (call_argslist = exp.shift) != s(:call, nil, :proc, s(:arglist))
-            raise "invalid first argument to iter: #{call_argslist.inspect}"
-          end
+          call_argslist = exp.shift
+          raise "DEBUG: invalid: #{call_argslist.inspct}" if call_argslist != s(:call, nil, :proc, s(:arglist))
 
           # process the reciever
           @receiver = process(exp.shift)
@@ -145,16 +144,9 @@ module DataMapper
         end
 
         def process_colon2(exp)
-          const           = process(exp.shift)
-          const_or_method = exp.shift
+          const = process(exp.shift)
 
-          if const.const_defined?(const_or_method)
-            const.const_get(const_or_method)
-          elsif const.respond_to?(const_or_method)
-            const.send(const_or_method)
-          else
-            raise "Cannot handle #{const.inspect} and #{const_or_method.inspect}"
-          end
+          const.const_get(exp.shift)
         end
 
         def process_const(exp)

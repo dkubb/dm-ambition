@@ -427,7 +427,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          pending do
+          pending 'TODO: make methods work inside block' do
             @return.conditions.should == [ [ :eql, @model.properties[:name], name ] ]
           end
         end
@@ -524,23 +524,132 @@ describe DataMapper::Ambition::Query do
           @return.conditions.should == [ [ :like, @model.properties[:name], /Dan Kubb/ ] ]
         end
       end
+
+      describe 'namespaced constant' do
+        before :all do
+          Object.send(:remove_const, :Condition) if defined?(::Condition)
+          module ::Condition
+            Name = 'Dan Kubb'
+          end
+
+          @return = @query.filter { |u| u.name == Condition::Name }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+        end
+      end
+
+      describe 'namespaced method' do
+        before :all do
+          Object.send(:remove_const, :Condition) if defined?(::Condition)
+          module ::Condition
+            def self.name
+              'Dan Kubb'
+            end
+          end
+
+          @return = @query.filter { |u| u.name == Condition::name }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+        end
+      end
+
     end
 
     describe 'with conditions' do
       describe 'ANDed' do
-        it 'should be awesome'
+        before :all do
+          @return = @query.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.sort_by { |c| c[1].name.to_s }.should == [
+            [ :eql, @model.properties[:id],   1          ],
+            [ :eql, @model.properties[:name], 'Dan Kubb' ],
+          ]
+        end
       end
 
       describe 'negated' do
-        it 'should be awesome'
+        before :all do
+          @return = @query.filter { |u| !(u.id == 1) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :not, @model.properties[:id], 1 ] ]
+        end
       end
 
       describe 'double-negated' do
-        it 'should be awesome'
+        before :all do
+          @return = @query.filter { |u| !(!(u.id == 1)) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not == @query
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+        end
       end
 
       describe 'none' do
-        it 'should be awesome'
+        before :all do
+          @return = @query.filter { |u| }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should return a copy of self' do
+          @return.should == @query
+        end
+
+        it 'should not set conditions' do
+          @return.conditions.should be_empty
+        end
+
       end
     end
   end
