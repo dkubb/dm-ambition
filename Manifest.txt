@@ -14,6 +14,7 @@ lib/dm-ambition/query/filter_processor.rb
 lib/dm-ambition/version.rb
 spec/public/collection_spec.rb
 spec/public/model_spec.rb
+spec/public/shared/filter_shared_spec.rb
 spec/semipublic/query_spec.rb
 spec/spec.opts
 spec/spec_helper.rb
