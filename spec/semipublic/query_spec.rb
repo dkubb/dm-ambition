@@ -32,7 +32,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -50,7 +50,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -68,7 +68,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -86,7 +86,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -104,7 +104,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -122,7 +122,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -140,7 +140,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -158,7 +158,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -176,7 +176,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -194,7 +194,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -212,7 +212,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -230,7 +230,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -248,7 +248,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -266,7 +266,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -284,7 +284,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -302,7 +302,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -320,7 +320,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -338,7 +338,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -361,7 +361,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -381,7 +381,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -401,7 +401,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -423,7 +423,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -445,7 +445,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -463,7 +463,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -481,7 +481,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -499,7 +499,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -517,7 +517,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -540,7 +540,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -565,7 +565,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -586,7 +586,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -607,7 +607,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
@@ -625,7 +625,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should not return self' do
-          @return.should_not == @query
+          @return.should_not equal(@query)
         end
 
         it 'should set conditions' do
