@@ -8,7 +8,7 @@ dir = Pathname(__FILE__).dirname.expand_path / 'dm-ambition'
 
 require dir / 'version'
 
-gem 'dm-core', DataMapper::Ambition::VERSION
+#gem 'dm-core', DataMapper::Ambition::VERSION
 require 'dm-core'
 
 require dir / 'collection'
