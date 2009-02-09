@@ -542,6 +542,7 @@ describe DataMapper::Ambition::Query do
       describe 'receiver matching a resource' do
         before :all do
           resource = User.new(:id => 1)
+
           @return = @subject.filter { |u| u == resource }
         end
 
@@ -558,22 +559,71 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'receiver matching a resource using Array#include?' do
-        before :all do
-          resource = User.new(:id => 1)
-          @return = @subject.filter { |u| [ resource ].include?(u) }
-        end
+      [ :include?, :member? ].each do |method|
+        describe "receiver matching a resource using Array##{method}" do
+          before :all do
+            resource = User.new(:id => 1)
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+            @return = @subject.filter { |u| [ resource ].send(method, u) }
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+          end
+        end
+      end
+
+      [ :key?, :has_key?, :include?, :member? ].each do |method|
+        describe "receiver matching a resource using Hash##{method}" do
+          before :all do
+            one = User.new(:id => 1)
+            two = User.new(:id => 2)
+
+            @return = @subject.filter { |u| { one => '1', two => '2' }.send(method, u) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
+        end
+      end
+
+      [ :value?, :has_value? ].each do |method|
+        describe "receiver matching a resource using Hash##{method}" do
+          before :all do
+            one = User.new(:id => 1)
+            two = User.new(:id => 2)
+
+            @return = @subject.filter { |u| { '1' => one, '2' => two }.send(method, u) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
         end
       end
 

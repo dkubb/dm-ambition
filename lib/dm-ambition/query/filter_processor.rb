@@ -177,23 +177,35 @@ module DataMapper
             end
 
           elsif rhs == @model
-
-            if lhs.kind_of?(Array) && (operator == :include? || operator == :member?)
-              if @model.key.size > 1
-                raise 'Until OR conditions are added can only match resources with single keys'
-              end
-
-              unless lhs.all? { |r| r.kind_of?(DataMapper::Resource) }
-                raise 'cannot compare against a non-resource'
-              end
-
-              property    = @model.key.first
-              bind_values = lhs.map { |r| r.key.first }.compact
-
-              evaluate_operator(:==, property, bind_values)
-            else
-              raise "cannot call #{lhs}##{operator} with #{@model.name} instance"
+            if @model.key.size > 1
+              raise 'Until OR conditions are added can only match resources with single keys'
             end
+
+            resources = case lhs
+              when Array
+                case operator
+                  when :include?, :member? then lhs
+                end
+
+              when Hash
+                case operator
+                  when :key?, :has_key?, :include?, :member? then lhs.keys
+                  when :value?, :has_value?                  then lhs.values
+                end
+            end
+
+            unless resources
+              raise "cannot call #{lhs.class}##{operator} with #{rhs.inspect}"
+            end
+
+            unless resources.all? { |r| r.kind_of?(DataMapper::Resource) }
+              raise 'cannot compare against a non-resource'
+            end
+
+            property   = @model.key.first
+            bind_value = resources.map { |r| r.key.first }.sort
+
+            evaluate_operator(:include?, bind_value, property)
 
           elsif lhs.kind_of?(DataMapper::Property)
             property   = lhs
