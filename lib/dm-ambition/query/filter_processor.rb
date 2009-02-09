@@ -172,7 +172,7 @@ module DataMapper
             elsif operator == :send
               @model.properties[rhs]
             else
-              raise "cannot call #{@model.name}##{operator} with #{rhs}"
+              raise "cannot call #{@model.name}##{operator} with #{rhs.inspect}"
             end
 
           elsif rhs == @model
@@ -207,12 +207,16 @@ module DataMapper
                 case operator
                   when :include?, :member?
                     operator = :==
+                  else
+                    raise "cannot call Array##{operator} with #{bind_value.inspect}"
                 end
 
               when Range
                 case operator
                   when :include?, :member?, :===
                     operator = :==
+                  else
+                    raise "cannot call Range##{operator} with #{bind_value.inspect}"
                 end
 
               when Hash
@@ -223,6 +227,8 @@ module DataMapper
                   when :value?, :has_value?
                     operator   = :==
                     bind_value = bind_value.values
+                  else
+                    raise "cannot call Hash##{operator} with #{bind_value.inspect}"
                 end
             end
 
@@ -244,13 +250,13 @@ module DataMapper
 
             operator = remap_operator(operator)
 
-            @conditions.update(DataMapper::Query::Operator.new(lhs.name, operator) => bind_value)
+            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
 
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *[ rhs ].compact)
 
           else
-            raise "NOT HANDLED: #{lhs.inspect} #{operator.inspect} #{rhs.inspect}"
+            raise "NOT HANDLED: #{lhs.inspect} #{operator} #{rhs.inspect}"
 
           end
         end
