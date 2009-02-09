@@ -52,6 +52,12 @@ module DataMapper
             operator = exp.shift
             rhs      = process(exp.shift)
 
+            if rhs.size > 1
+              raise "DEBUG: rhs.size should not be larger than 1, but was #{rhs.size}: #{rhs.inspect}"
+            else
+              rhs = rhs.first
+            end
+
             if lhs.nil?
               nil
             else
@@ -153,16 +159,33 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
-          if lhs == @model && rhs.empty?
+          if lhs == @model && rhs.nil?
             @model.properties[operator]
 
-          elsif lhs == @model && rhs.respond_to?(:size) && rhs.size == 1 && rhs.first.kind_of?(DataMapper::Resource)
-            if (key = rhs.first.key).all?
+          elsif lhs == @model && rhs.kind_of?(DataMapper::Resource)
+            resource = rhs
+
+            if (key = resource.key).all?
               @conditions.update(@model.key.zip(key).to_hash)
             end
 
-          elsif rhs.respond_to?(:size) && rhs.size == 1 && rhs.first.kind_of?(DataMapper::Property)
-            property   = rhs.first
+          elsif rhs == @model && lhs.kind_of?(Array) && (operator == :include? || operator == :member?)
+            if @model.key.size > 1
+              raise 'Until OR conditions are added can only match resources with single keys'
+            end
+
+            ids = []
+
+            lhs.each do |resource|
+              next unless resource.kind_of?(DataMapper::Resource)
+              next if (id = resource.key.first).nil?
+              ids << id
+            end
+
+            @conditions.update(@model.key.first => ids)
+
+          elsif rhs.kind_of?(DataMapper::Property)
+            property   = rhs
             bind_value = lhs
 
             # TODO: throw an exception if the operator is :== and the bind value is an Array
@@ -203,7 +226,7 @@ module DataMapper
             # TODO: throw an exception if the operator is :== and the value is an Array
             #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
 
-            if operator == :nil? && bind_value.empty?
+            if operator == :nil? && bind_value.nil?
               operator   = :==
               bind_value = nil
             end
@@ -213,7 +236,7 @@ module DataMapper
             @conditions.update(DataMapper::Query::Operator.new(lhs.name, operator) => bind_value)
 
           elsif lhs.respond_to?(operator)
-            lhs.send(operator, *rhs)
+            lhs.send(operator, *[ rhs ].compact)
 
           else
             raise "NOT HANDLED: #{lhs.inspect} #{operator.inspect} #{rhs.inspect}"
