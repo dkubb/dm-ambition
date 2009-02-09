@@ -55,7 +55,7 @@ module DataMapper
             if lhs.nil?
               nil
             else
-              process_operator(operator, lhs, rhs)
+              evaluate_operator(operator, lhs, rhs)
             end
           else
             raise "unhandled call: #{exp.inspect}"
@@ -88,7 +88,71 @@ module DataMapper
           arglist
         end
 
-        def process_operator(operator, lhs, rhs)
+        def process_colon2(exp)
+          const = process(exp.shift)
+
+          const.const_get(exp.shift)
+        end
+
+        def process_const(exp)
+          Object.const_get(exp.shift)
+        end
+
+        def process_match3(exp)
+          rhs = process(exp.shift)
+          lhs = process(exp.shift)
+
+          evaluate_operator(:=~, lhs, rhs)
+        end
+
+        def process_array(exp)
+          array = []
+          while sexp = exp.shift
+            array << process(sexp)
+          end
+          array
+        end
+
+        def process_hash(exp)
+          hash = {}
+          until exp.empty?
+            key   = process(exp.shift)
+            value = process(exp.shift)
+
+            hash[key] = value
+          end
+          hash
+        end
+
+        def process_str(exp)
+          exp.shift
+        end
+
+        def process_lit(exp)
+          exp.shift
+        end
+
+        def process_true(exp)
+          true
+        end
+
+        def process_false(exp)
+          false
+        end
+
+        def process_nil(exp)
+          nil
+        end
+
+        def process_ivar(exp)
+          value(exp.shift)
+        end
+
+        def process_gvar(exp)
+          value(exp.shift)
+        end
+
+        def evaluate_operator(operator, lhs, rhs)
           if lhs == @model && rhs.empty?
             @model.properties[operator]
 
@@ -155,70 +219,6 @@ module DataMapper
             raise "NOT HANDLED: #{lhs.inspect} #{operator.inspect} #{rhs.inspect}"
 
           end
-        end
-
-        def process_colon2(exp)
-          const = process(exp.shift)
-
-          const.const_get(exp.shift)
-        end
-
-        def process_const(exp)
-          Object.const_get(exp.shift)
-        end
-
-        def process_match3(exp)
-          rhs = process(exp.shift)
-          lhs = process(exp.shift)
-
-          process_operator(:=~, lhs, rhs)
-        end
-
-        def process_array(exp)
-          array = []
-          while sexp = exp.shift
-            array << process(sexp)
-          end
-          array
-        end
-
-        def process_hash(exp)
-          hash = {}
-          until exp.empty?
-            key   = process(exp.shift)
-            value = process(exp.shift)
-
-            hash[key] = value
-          end
-          hash
-        end
-
-        def process_str(exp)
-          exp.shift
-        end
-
-        def process_lit(exp)
-          exp.shift
-        end
-
-        def process_true(exp)
-          true
-        end
-
-        def process_false(exp)
-          false
-        end
-
-        def process_nil(exp)
-          nil
-        end
-
-        def process_ivar(exp)
-          value(exp.shift)
-        end
-
-        def process_gvar(exp)
-          value(exp.shift)
         end
 
         def remap_operator(operator)
