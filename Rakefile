@@ -14,8 +14,8 @@ GEM_NAME         = 'dm-ambition'
 GEM_VERSION      = DataMapper::Ambition::VERSION
 GEM_DEPENDENCIES = [
   [ 'dm-core',   GEM_VERSION ],
-  [ 'ParseTree', '~>3.0.2'   ],
-  [ 'ruby2ruby', '~>1.2.1'   ],
+  [ 'ParseTree', '~>3.0.3'   ],
+  [ 'ruby2ruby', '~>1.2.2'   ],
 ]
 
 GEM_CLEAN  = %w[ log pkg coverage ]
