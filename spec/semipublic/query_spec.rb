@@ -255,7 +255,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, Article.properties[:title], 'DataMapper' ] ]
+          @return.conditions.should == [ [ :eql, User.articles.title, 'DataMapper' ] ]
         end
 
         it 'should set links' do
@@ -280,7 +280,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+          @return.conditions.should == [ [ :eql, Article.user.name, 'Dan Kubb' ] ]
         end
 
         it 'should set links' do
