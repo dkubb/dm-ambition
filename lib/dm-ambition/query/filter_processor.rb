@@ -28,18 +28,24 @@ module DataMapper
         end
 
         def process_error(exp)
-          raise "ERROR: calling process_#{exp.shift} with #{exp.inspect} (in process_error)"
+          raise "DEBUG: calling process_#{exp.shift} with #{exp.inspect} (in process_error)"
         end
 
         def process_iter(exp)
           call_argslist = exp.shift
           raise "DEBUG: invalid: #{call_argslist.inspct}" if call_argslist != s(:call, nil, :proc, s(:arglist))
 
-          # process the reciever
+          # get the reciever
           @receiver = process(exp.shift)
 
-          # process the body
-          process(exp.shift)
+          # process the Proc body
+          result = process(exp.shift)
+
+          unless result.equal?(@conditions) || (result.nil? && @conditions.empty?)
+            raise "DEBUG: invalid result processing body: #{result.inspect}"
+          end
+
+          result
         end
 
         def process_lasgn(exp)
@@ -68,7 +74,7 @@ module DataMapper
               evaluate_operator(operator, lhs, rhs)
             end
           else
-            raise "unhandled call: #{exp.inspect}"
+            raise "DEBUG: unhandled call: #{exp.inspect}"
           end
         end
 
@@ -76,6 +82,7 @@ module DataMapper
           while sexp = exp.shift
             process(sexp)
           end
+          @conditions
         end
 
         def process_not(exp)
@@ -173,7 +180,7 @@ module DataMapper
                 @conditions.update(@model.key.zip(key).to_hash)
               end
             else
-              raise "cannot call #{@model.name}##{operator} with #{rhs.inspect}"
+              raise "DEBUG: cannot call #{@model.name}##{operator} with #{rhs.inspect}"
             end
 
           elsif rhs == @model
@@ -195,7 +202,7 @@ module DataMapper
             end
 
             unless resources
-              raise "cannot call #{lhs.class}##{operator} with #{rhs.inspect}"
+              raise "DEBUG: cannot call #{lhs.class}##{operator} with #{rhs.inspect}"
             end
 
             unless resources.all? { |r| r.kind_of?(DataMapper::Resource) }
@@ -236,7 +243,7 @@ module DataMapper
                   when :include?, :member?
                     operator = :==
                   else
-                    raise "cannot call Array##{operator} with #{bind_value.inspect}"
+                    raise "DEBUG: cannot call Array##{operator} with #{bind_value.inspect}"
                 end
 
               when Range
@@ -244,7 +251,7 @@ module DataMapper
                   when :include?, :member?, :===
                     operator = :==
                   else
-                    raise "cannot call Range##{operator} with #{bind_value.inspect}"
+                    raise "DEBUG: cannot call Range##{operator} with #{bind_value.inspect}"
                 end
 
               when Hash
@@ -256,7 +263,7 @@ module DataMapper
                     operator   = :==
                     bind_value = bind_value.values
                   else
-                    raise "cannot call Hash##{operator} with #{bind_value.inspect}"
+                    raise "DEBUG: cannot call Hash##{operator} with #{bind_value.inspect}"
                 end
             end
 
@@ -268,7 +275,7 @@ module DataMapper
             lhs.send(operator, *[ rhs ].compact)
 
           else
-            raise "NOT HANDLED: #{lhs.inspect} #{operator} #{rhs.inspect}"
+            raise "DEBUG: not handled: #{lhs.inspect} #{operator} #{rhs.inspect}"
 
           end
         end
@@ -282,7 +289,7 @@ module DataMapper
             when :>= then @negated ? :lt  : :gte
             when :<  then @negated ? :gte : :lt
             when :<= then @negated ? :gt  : :lte
-            else raise "unknown operator #{operator}"
+            else raise "DEBUG: unknown operator #{operator}"
           end
         end
 
