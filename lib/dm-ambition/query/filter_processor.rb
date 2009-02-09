@@ -182,15 +182,14 @@ module DataMapper
                 raise 'Until OR conditions are added can only match resources with single keys'
               end
 
-              ids = []
-
-              lhs.each do |resource|
-                next unless resource.kind_of?(DataMapper::Resource)
-                next if (id = resource.key.first).nil?
-                ids << id
+              unless lhs.all? { |r| r.kind_of?(DataMapper::Resource) }
+                raise 'cannot compare against a non-resource'
               end
 
-              @conditions.update(@model.key.first => ids)
+              property    = @model.key.first
+              bind_values = lhs.map { |r| r.key.first }.compact
+
+              evaluate_operator(:==, property, bind_values)
             else
               raise "cannot call #{lhs}##{operator} with #{@model.name} instance"
             end
