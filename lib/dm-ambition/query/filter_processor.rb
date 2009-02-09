@@ -159,14 +159,20 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
-          if lhs == @model && rhs.nil?
-            @model.properties[operator]
+          if lhs == @model
 
-          elsif lhs == @model && rhs.kind_of?(DataMapper::Resource)
-            resource = rhs
+            if rhs.nil?
+              @model.properties[operator]
+            elsif rhs.kind_of?(DataMapper::Resource)
+              resource = rhs
 
-            if (key = resource.key).all?
-              @conditions.update(@model.key.zip(key).to_hash)
+              if (key = resource.key).all?
+                @conditions.update(@model.key.zip(key).to_hash)
+              end
+            elsif operator == :send
+              @model.properties[rhs]
+            else
+              raise "cannot call #{operator} with #{rhs} on receiver"
             end
 
           elsif rhs == @model && lhs.kind_of?(Array) && (operator == :include? || operator == :member?)

@@ -694,6 +694,25 @@ describe DataMapper::Ambition::Query do
           @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
         end
       end
+
+      describe 'using send on receiver' do
+        before :all do
+          @return = @subject.filter { |u| u.send(:name) == 'Dan Kubb' }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+        end
+      end
+
     end
   end
 end
