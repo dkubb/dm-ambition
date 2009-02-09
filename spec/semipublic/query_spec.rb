@@ -132,201 +132,83 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'Array#include?' do
-        before :all do
-          @return = @subject.filter { |u| [ 1, 2 ].include?(u.id) }
-        end
+      [ :include?, :member? ].each do |method|
+        describe "Array##{method}" do
+          before :all do
+            @return = @subject.filter { |u| [ 1, 2 ].send(method, u.id) }
+          end
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-        end
-      end
-
-      describe 'Array#member?' do
-        before :all do
-          @return = @subject.filter { |u| [ 1, 2 ].member?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
         end
       end
 
-      describe 'Range#include?' do
-        before :all do
-          @return = @subject.filter { |u| (1..2).include?(u.id) }
-        end
+      [ :include?, :member?, :=== ].each do |method|
+        describe "Range##{method}" do
+          before :all do
+            @return = @subject.filter { |u| (1..2).send(method, u.id) }
+          end
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
-        end
-      end
-
-      describe 'Range#member?' do
-        before :all do
-          @return = @subject.filter { |u| (1..2).member?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
+          end
         end
       end
 
-      describe 'Range#===' do
-        before :all do
-          @return = @subject.filter { |u| (1..2) === u.id }
-        end
+      [ :key?, :has_key?, :include?, :member? ].each do |method|
+        describe "Hash##{method}" do
+          before :all do
+            @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.send(method, u.id) }
+          end
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1..2 ] ]
-        end
-      end
-
-      describe 'Hash#key?' do
-        before :all do
-          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.key?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
         end
       end
 
-      describe 'Hash#has_key?' do
-        before :all do
-          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.has_key?(u.id) }
-        end
+      [ :value?, :has_value? ].each do |method|
+        describe "Hash##{method}" do
+          before :all do
+            @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
+          end
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-        end
-      end
-
-      describe 'Hash#include?' do
-        before :all do
-          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.include?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-        end
-      end
-
-      describe 'Hash#member?' do
-        before :all do
-          @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.member?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-        end
-      end
-
-      describe 'Hash#value?' do
-        before :all do
-          @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-        end
-      end
-
-      describe 'Hash#has_value?' do
-        before :all do
-          @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.has_value?(u.id) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
         end
       end
 
@@ -712,7 +594,6 @@ describe DataMapper::Ambition::Query do
           @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
         end
       end
-
     end
   end
 end

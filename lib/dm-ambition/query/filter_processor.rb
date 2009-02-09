@@ -52,6 +52,10 @@ module DataMapper
             operator = exp.shift
             rhs      = process(exp.shift)
 
+            if operator == :send
+              operator = rhs.shift
+            end
+
             if rhs.size > 1
               raise "DEBUG: rhs.size should not be larger than 1, but was #{rhs.size}: #{rhs.inspect}"
             else
@@ -160,7 +164,6 @@ module DataMapper
 
         def evaluate_operator(operator, lhs, rhs)
           if lhs == @model
-
             if rhs.nil?
               @model.properties[operator]
             elsif rhs.kind_of?(DataMapper::Resource)
@@ -169,8 +172,6 @@ module DataMapper
               if (key = resource.key).all?
                 @conditions.update(@model.key.zip(key).to_hash)
               end
-            elsif operator == :send
-              @model.properties[rhs]
             else
               raise "cannot call #{@model.name}##{operator} with #{rhs.inspect}"
             end
