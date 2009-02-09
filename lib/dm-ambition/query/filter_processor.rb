@@ -11,8 +11,6 @@ module DataMapper
   module Ambition
     module Query
       class FilterProcessor < SexpProcessor
-        OPERATIONS = [ :==, :=~, :>, :>=, :<, :<= ].to_set.freeze
-
         attr_reader :conditions
 
         def initialize(binding, model, negated = false)
@@ -174,7 +172,7 @@ module DataMapper
         def evaluate_operator(operator, lhs, rhs)
           if lhs == @model
             if rhs.nil?
-              @model.send(:method_missing, operator)
+              @model.properties[operator]
             elsif rhs.kind_of?(DataMapper::Resource)
               resource = rhs
 
@@ -216,7 +214,7 @@ module DataMapper
 
             evaluate_operator(:include?, bind_value, property)
 
-          elsif lhs.kind_of?(DataMapper::Property) || lhs.kind_of?(DataMapper::Query::Path)
+          elsif lhs.kind_of?(DataMapper::Property)
             property   = lhs
             bind_value = rhs
 
@@ -228,17 +226,11 @@ module DataMapper
               bind_value = nil
             end
 
-            if property.kind_of?(DataMapper::Property)
-              operator = remap_operator(operator)
-              @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
-            elsif OPERATIONS.include?(operator)
-              operator = remap_operator(operator)
-              @conditions.update(property.send(operator) => bind_value)
-            else
-              property.send(operator)
-            end
+            operator = remap_operator(operator)
 
-          elsif rhs.kind_of?(DataMapper::Property) || rhs.kind_of?(DataMapper::Query::Path)
+            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
+
+          elsif rhs.kind_of?(DataMapper::Property)
             property   = rhs
             bind_value = lhs
 
@@ -275,15 +267,9 @@ module DataMapper
                 end
             end
 
-            if property.kind_of?(DataMapper::Property)
-              operator = remap_operator(operator)
-              @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
-            elsif OPERATIONS.include?(operator)
-              operator = remap_operator(operator)
-              @conditions.update(property.send(operator) => bind_value)
-            else
-              property.send(operator)
-            end
+            operator = remap_operator(operator)
+
+            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
 
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *[ rhs ].compact)

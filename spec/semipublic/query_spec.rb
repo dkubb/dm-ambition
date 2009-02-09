@@ -9,17 +9,6 @@ describe DataMapper::Ambition::Query do
       property :id,    Serial
       property :name,  String
       property :admin, Boolean
-
-      has n, :articles
-    end
-
-    class ::Article
-      include DataMapper::Resource
-
-      property :id,    Serial
-      property :title, String
-
-      belongs_to :user
     end
   end
 
@@ -239,53 +228,7 @@ describe DataMapper::Ambition::Query do
         it 'should set conditions' do
           @return.conditions.should == [ [ :eql, @model.properties[:id], nil ] ]
         end
-      end
 
-      describe 'receiver.has.attr == value' do
-        before :all do
-          @return = @subject.filter { |u| u.articles.title == 'DataMapper' }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, Article.properties[:title], 'DataMapper' ] ]
-        end
-
-        it 'should set links' do
-          @return.links.should == [ @model.relationships[:articles] ]
-        end
-      end
-
-      describe 'receiver.belongs_to.attr == value' do
-        before :all do
-          model   = Article
-          subject = DataMapper::Query.new(@repository, model)
-
-          @return = subject.filter { |a| a.user.name == 'Dan Kubb' }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
-        end
-
-        it 'should set links' do
-          @return.links.should == [ Article.relationships[:user] ]
-        end
       end
     end
 
@@ -513,6 +456,7 @@ describe DataMapper::Ambition::Query do
           @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
         end
       end
+
     end
 
     describe 'with conditions' do
