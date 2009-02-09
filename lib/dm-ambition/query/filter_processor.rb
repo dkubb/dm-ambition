@@ -91,13 +91,20 @@ module DataMapper
         def process_operator(operator, lhs, rhs)
           if lhs == @model && rhs.empty?
             @model.properties[operator]
-          elsif rhs.respond_to?(:size) && rhs.size == 1 && rhs.first.kind_of?(DataMapper::Property)
-            rhs = rhs.first
 
-            # TODO: throw an exception if the operator is :== and the value is an Array
+          elsif lhs == @model && rhs.respond_to?(:size) && rhs.size == 1 && rhs.first.kind_of?(DataMapper::Resource)
+            if (key = rhs.first.key).all?
+              @conditions.update(@model.key.zip(key).to_hash)
+            end
+
+          elsif rhs.respond_to?(:size) && rhs.size == 1 && rhs.first.kind_of?(DataMapper::Property)
+            property   = rhs.first
+            bind_value = lhs
+
+            # TODO: throw an exception if the operator is :== and the bind value is an Array
             #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
 
-            case lhs
+            case bind_value
               when Array
                 case operator
                   when :include?, :member?
@@ -113,33 +120,40 @@ module DataMapper
               when Hash
                 case operator
                   when :key?, :has_key?, :include?, :member?
-                    operator = :==
-                    lhs      = lhs.keys
+                    operator   = :==
+                    bind_value = bind_value.keys
                   when :value?, :has_value?
-                    operator = :==
-                    lhs      = lhs.values
+                    operator   = :==
+                    bind_value = bind_value.values
                 end
             end
 
             operator = remap_operator(operator)
 
-            @conditions.update(DataMapper::Query::Operator.new(rhs.name, operator) => lhs)
+            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
+
           elsif lhs.kind_of?(DataMapper::Property)
+            property   = lhs
+            bind_value = rhs
+
             # TODO: throw an exception if the operator is :== and the value is an Array
             #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
 
-            if operator == :nil? && rhs.empty?
-              operator = :==
-              rhs      = nil
+            if operator == :nil? && bind_value.empty?
+              operator   = :==
+              bind_value = nil
             end
 
             operator = remap_operator(operator)
 
-            @conditions.update(DataMapper::Query::Operator.new(lhs.name, operator) => rhs)
+            @conditions.update(DataMapper::Query::Operator.new(lhs.name, operator) => bind_value)
+
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *rhs)
+
           else
             raise "NOT HANDLED: #{lhs.inspect} #{operator.inspect} #{rhs.inspect}"
+
           end
         end
 
