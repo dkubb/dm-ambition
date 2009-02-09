@@ -195,12 +195,28 @@ module DataMapper
               raise "cannot call #{lhs}##{operator} with #{@model.name} instance"
             end
 
+          elsif lhs.kind_of?(DataMapper::Property)
+            property   = lhs
+            bind_value = rhs
+
+            # TODO: throw an exception if the operator is :== and the value is an Array
+            #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
+
+            if operator == :nil? && bind_value.nil?
+              operator   = :==
+              bind_value = nil
+            end
+
+            operator = remap_operator(operator)
+
+            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
+
           elsif rhs.kind_of?(DataMapper::Property)
             property   = rhs
             bind_value = lhs
 
             # TODO: throw an exception if the operator is :== and the bind value is an Array
-            #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
+            #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
 
             case bind_value
               when Array
@@ -230,22 +246,6 @@ module DataMapper
                   else
                     raise "cannot call Hash##{operator} with #{bind_value.inspect}"
                 end
-            end
-
-            operator = remap_operator(operator)
-
-            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
-
-          elsif lhs.kind_of?(DataMapper::Property)
-            property   = lhs
-            bind_value = rhs
-
-            # TODO: throw an exception if the operator is :== and the value is an Array
-            #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
-
-            if operator == :nil? && bind_value.nil?
-              operator   = :==
-              bind_value = nil
             end
 
             operator = remap_operator(operator)
