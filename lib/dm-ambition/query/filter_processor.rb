@@ -172,23 +172,28 @@ module DataMapper
             elsif operator == :send
               @model.properties[rhs]
             else
-              raise "cannot call #{operator} with #{rhs} on receiver"
+              raise "cannot call #{@model.name}##{operator} with #{rhs}"
             end
 
-          elsif rhs == @model && lhs.kind_of?(Array) && (operator == :include? || operator == :member?)
-            if @model.key.size > 1
-              raise 'Until OR conditions are added can only match resources with single keys'
+          elsif rhs == @model
+
+            if lhs.kind_of?(Array) && (operator == :include? || operator == :member?)
+              if @model.key.size > 1
+                raise 'Until OR conditions are added can only match resources with single keys'
+              end
+
+              ids = []
+
+              lhs.each do |resource|
+                next unless resource.kind_of?(DataMapper::Resource)
+                next if (id = resource.key.first).nil?
+                ids << id
+              end
+
+              @conditions.update(@model.key.first => ids)
+            else
+              raise "cannot call #{lhs}##{operator} with #{@model.name} instance"
             end
-
-            ids = []
-
-            lhs.each do |resource|
-              next unless resource.kind_of?(DataMapper::Resource)
-              next if (id = resource.key.first).nil?
-              ids << id
-            end
-
-            @conditions.update(@model.key.first => ids)
 
           elsif rhs.kind_of?(DataMapper::Property)
             property   = rhs
