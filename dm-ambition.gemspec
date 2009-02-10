@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Kubb"]
-  s.date = %q{2009-02-09}
+  s.date = %q{2009-02-10}
   s.description = %q{DataMapper plugin providing an Ambition-like API}
   s.email = ["dan.kubb [a] gmail [d] com"]
   s.extra_rdoc_files = ["README.txt", "LICENSE", "TODO", "History.txt"]

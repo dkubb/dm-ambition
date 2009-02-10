@@ -34,8 +34,14 @@ module DataMapper
     end
 
     class Collection
-      def new_collection(query, resources)
-        self.class.new(query).replace(resources)
+      def new_collection(query, resources = nil, &block)
+        collection = self.class.new(query, &block)
+
+        if resources
+          collection.replace(resources)
+        end
+
+        collection
       end
     end
 
