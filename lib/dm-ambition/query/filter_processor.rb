@@ -41,7 +41,11 @@ module DataMapper
           # process the Proc body
           result = process(exp.shift)
 
-          unless result.equal?(@conditions) || (result.nil? && @conditions.empty?)
+          if result.nil?
+            raise "DEBUG: conditions much be supplied"
+          end
+
+          unless result.equal?(@conditions)
             raise "DEBUG: invalid result processing body: #{result.inspect}"
           end
 
@@ -170,17 +174,24 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
+          if operator == :=~ && !lhs.kind_of?(Regexp) && !rhs.kind_of?(Regexp)
+            raise "DEBUG: when using =~ operator one side should be a Regexp"
+          end
+
           if lhs == @model
             if rhs.nil?
               @model.properties[operator]
-            elsif rhs.kind_of?(DataMapper::Resource)
+            elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
               resource = rhs
 
-              if (key = resource.key).all?
+              if resource.repository == DataMapper.repository &&
+                resource.saved? &&
+                !resource.dirty? &&
+                (key = resource.key).all?
                 @conditions.update(@model.key.zip(key).to_hash)
               end
             else
-              raise "DEBUG: cannot call #{@model.name}##{operator} with #{rhs.inspect}"
+              raise "DEBUG: cannot call #{@model.name}.#{operator} with #{rhs.inspect}"
             end
 
           elsif rhs == @model

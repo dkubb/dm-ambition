@@ -10,6 +10,10 @@ describe DataMapper::Ambition::Query do
       property :name,  String
       property :admin, Boolean
     end
+
+    if DataMapper.respond_to?(:auto_migrate!)
+      DataMapper.auto_migrate!
+    end
   end
 
   before :all do
@@ -44,7 +48,7 @@ describe DataMapper::Ambition::Query do
 
       describe '=~' do
         before :all do
-          @return = @subject.filter { |u| u.name =~ 'Dan Kubb' }
+          @return = @subject.filter { |u| u.name =~ /Dan Kubb/ }
         end
 
         it 'should return a Query' do
@@ -56,7 +60,7 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == [ [ :like, @model.properties[:name], 'Dan Kubb' ] ]
+          @return.conditions.should == [ [ :like, @model.properties[:name], /Dan Kubb/ ] ]
         end
       end
 
@@ -228,11 +232,231 @@ describe DataMapper::Ambition::Query do
         it 'should set conditions' do
           @return.conditions.should == [ [ :eql, @model.properties[:id], nil ] ]
         end
-
       end
     end
 
-    describe 'with value' do
+    describe 'with bind value' do
+      describe 'nil' do
+        before :all do
+          @return = @subject.filter { |u| u.name == nil }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], nil ] ]
+        end
+      end
+
+      describe 'true' do
+        before :all do
+          @return = @subject.filter { |u| u.admin == true }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:admin], true ] ]
+        end
+      end
+
+      describe 'false' do
+        before :all do
+          @return = @subject.filter { |u| u.admin == false }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:admin], false ] ]
+        end
+      end
+    end
+
+    describe 'with conditions' do
+      describe 'ANDed' do
+        before :all do
+          @return = @subject.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.sort_by { |c| c[1].name.to_s }.should == [
+            [ :eql, @model.properties[:id],   1          ],
+            [ :eql, @model.properties[:name], 'Dan Kubb' ],
+          ]
+        end
+      end
+
+      describe 'negated' do
+        before :all do
+          @return = @subject.filter { |u| !(u.id == 1) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :not, @model.properties[:id], 1 ] ]
+        end
+      end
+
+      describe 'double-negated' do
+        before :all do
+          @return = @subject.filter { |u| !(!(u.id == 1)) }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+        end
+      end
+
+      describe 'receiver matching a resource' do
+        before :all do
+          resource = User.create(:id => 1)
+
+          @return = @subject.filter { |u| u == resource }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+        end
+      end
+
+      [ :include?, :member? ].each do |method|
+        describe "receiver matching a resource using Array##{method}" do
+          before :all do
+            resource = User.new(:id => 1)
+
+            @return = @subject.filter { |u| [ resource ].send(method, u) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+          end
+        end
+      end
+
+      [ :key?, :has_key?, :include?, :member? ].each do |method|
+        describe "receiver matching a resource using Hash##{method}" do
+          before :all do
+            one = User.new(:id => 1)
+            two = User.new(:id => 2)
+
+            @return = @subject.filter { |u| { one => '1', two => '2' }.send(method, u) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
+        end
+      end
+
+      [ :value?, :has_value? ].each do |method|
+        describe "receiver matching a resource using Hash##{method}" do
+          before :all do
+            one = User.new(:id => 1)
+            two = User.new(:id => 2)
+
+            @return = @subject.filter { |u| { '1' => one, '2' => two }.send(method, u) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
+          end
+        end
+      end
+
+      describe 'using send on receiver' do
+        before :all do
+          @return = @subject.filter { |u| u.send(:name) == 'Dan Kubb' }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
+        end
+      end
+    end
+
+    describe 'with external value' do
       describe 'local variable' do
         before :all do
           name = 'Dan Kubb'
@@ -337,78 +561,6 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'nil' do
-        before :all do
-          @return = @subject.filter { |u| u.name == nil }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:name], nil ] ]
-        end
-      end
-
-      describe 'true' do
-        before :all do
-          @return = @subject.filter { |u| u.admin == true }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:admin], true ] ]
-        end
-      end
-
-      describe 'false' do
-        before :all do
-          @return = @subject.filter { |u| u.admin == false }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:admin], false ] ]
-        end
-      end
-
-      describe 'Regexp' do
-        before :all do
-          @return = @subject.filter { |u| u.name =~ /Dan Kubb/ }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :like, @model.properties[:name], /Dan Kubb/ ] ]
-        end
-      end
-
       describe 'namespaced constant' do
         before :all do
           Object.send(:remove_const, :Condition) if defined?(::Condition)
@@ -442,194 +594,6 @@ describe DataMapper::Ambition::Query do
           end
 
           @return = @subject.filter { |u| u.name == Condition::name }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:name], 'Dan Kubb' ] ]
-        end
-      end
-
-    end
-
-    describe 'with conditions' do
-      describe 'ANDed' do
-        before :all do
-          @return = @subject.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.sort_by { |c| c[1].name.to_s }.should == [
-            [ :eql, @model.properties[:id],   1          ],
-            [ :eql, @model.properties[:name], 'Dan Kubb' ],
-          ]
-        end
-      end
-
-      describe 'negated' do
-        before :all do
-          @return = @subject.filter { |u| !(u.id == 1) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :not, @model.properties[:id], 1 ] ]
-        end
-      end
-
-      describe 'double-negated' do
-        before :all do
-          @return = @subject.filter { |u| !(!(u.id == 1)) }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
-        end
-      end
-
-      describe 'none' do
-        before :all do
-          @return = @subject.filter { |u| }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should return a copy of self' do
-          @return.should eql(@subject)
-        end
-
-        it 'should not set conditions' do
-          @return.conditions.should be_empty
-        end
-      end
-
-      describe 'receiver matching a resource' do
-        before :all do
-          resource = User.new(:id => 1)
-
-          @return = @subject.filter { |u| u == resource }
-        end
-
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
-
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
-
-        it 'should set conditions' do
-          @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
-        end
-      end
-
-      [ :include?, :member? ].each do |method|
-        describe "receiver matching a resource using Array##{method}" do
-          before :all do
-            resource = User.new(:id => 1)
-
-            @return = @subject.filter { |u| [ resource ].send(method, u) }
-          end
-
-          it 'should return a Query' do
-            @return.should be_kind_of(DataMapper::Query)
-          end
-
-          it 'should not return self' do
-            @return.should_not equal(@subject)
-          end
-
-          it 'should set conditions' do
-            @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
-          end
-        end
-      end
-
-      [ :key?, :has_key?, :include?, :member? ].each do |method|
-        describe "receiver matching a resource using Hash##{method}" do
-          before :all do
-            one = User.new(:id => 1)
-            two = User.new(:id => 2)
-
-            @return = @subject.filter { |u| { one => '1', two => '2' }.send(method, u) }
-          end
-
-          it 'should return a Query' do
-            @return.should be_kind_of(DataMapper::Query)
-          end
-
-          it 'should not return self' do
-            @return.should_not equal(@subject)
-          end
-
-          it 'should set conditions' do
-            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-          end
-        end
-      end
-
-      [ :value?, :has_value? ].each do |method|
-        describe "receiver matching a resource using Hash##{method}" do
-          before :all do
-            one = User.new(:id => 1)
-            two = User.new(:id => 2)
-
-            @return = @subject.filter { |u| { '1' => one, '2' => two }.send(method, u) }
-          end
-
-          it 'should return a Query' do
-            @return.should be_kind_of(DataMapper::Query)
-          end
-
-          it 'should not return self' do
-            @return.should_not equal(@subject)
-          end
-
-          it 'should set conditions' do
-            @return.conditions.should == [ [ :eql, @model.properties[:id], [ 1, 2 ] ] ]
-          end
-        end
-      end
-
-      describe 'using send on receiver' do
-        before :all do
-          @return = @subject.filter { |u| u.send(:name) == 'Dan Kubb' }
         end
 
         it 'should return a Query' do
