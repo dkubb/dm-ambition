@@ -70,7 +70,7 @@ User.select { |u| u.send(:name) == 'Dan Kubb' }
 License
 -------
 
-Copyright (c) 2008 Dan Kubb
+Copyright (c) 2009 Dan Kubb
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
