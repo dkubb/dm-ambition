@@ -14,6 +14,7 @@ From Gem:
 With a local working copy:
 
     $ git clone git://github.com/dkubb/dm-ambition.git
+    $ cd dm-ambition
     $ rake package && sudo rake install
 
 Examples
