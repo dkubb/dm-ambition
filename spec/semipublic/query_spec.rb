@@ -385,8 +385,8 @@ describe DataMapper::Ambition::Query do
             @return.should_not equal(@subject)
           end
 
-          it 'should set conditions' do
-            @return.conditions.should == [ [ :eql, @model.properties[:id], 1 ] ]
+          it 'should return expected Query' do
+            @return.should == DataMapper::Query.new(@repository, @model, :id => [ 1 ])
           end
         end
       end

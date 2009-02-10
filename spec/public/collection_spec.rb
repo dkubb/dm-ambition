@@ -25,19 +25,17 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
       @repository = DataMapper.repository(:default)
       @model      = User
       @query      = DataMapper::Query.new(@repository, @model)
-      @collection = DataMapper::Collection.new(@query)
 
       @user  = @model.create(:name => 'Dan Kubb',  :admin => true)
       @other = @model.create(:name => 'Sam Smoot', :admin => true)
 
-      @collection.to_a if loaded
-
-      @subject = @collection
+      @subject = @model.all(@query)
+      @subject.to_a if loaded
     end
 
     it_should_behave_like 'it has public filter methods'
 
-    unless loaded
+    unless loaded || Gem::Version.new(DataMapper::VERSION) < Gem::Version.new('0.10')
       [ :select, :find_all ].each do |method|
         describe "##{method}", '(unloaded)' do
           describe 'when matching resource prepended' do

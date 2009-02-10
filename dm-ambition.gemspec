@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Kubb"]
-  s.date = %q{2009-02-07}
+  s.date = %q{2009-02-09}
   s.description = %q{DataMapper plugin providing an Ambition-like API}
   s.email = ["dan.kubb [a] gmail [d] com"]
   s.extra_rdoc_files = ["README.txt", "LICENSE", "TODO", "History.txt"]
@@ -24,17 +24,17 @@ Gem::Specification.new do |s|
     s.specification_version = 2
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<dm-core>, ["= 0.10.0"])
-      s.add_runtime_dependency(%q<ParseTree>, ["~> 3.0.2"])
-      s.add_runtime_dependency(%q<ruby2ruby>, ["~> 1.2.1"])
+      s.add_runtime_dependency(%q<dm-core>, [">= 0"])
+      s.add_runtime_dependency(%q<ParseTree>, ["~> 3.0.3"])
+      s.add_runtime_dependency(%q<ruby2ruby>, ["~> 1.2.2"])
     else
-      s.add_dependency(%q<dm-core>, ["= 0.10.0"])
-      s.add_dependency(%q<ParseTree>, ["~> 3.0.2"])
-      s.add_dependency(%q<ruby2ruby>, ["~> 1.2.1"])
+      s.add_dependency(%q<dm-core>, [">= 0"])
+      s.add_dependency(%q<ParseTree>, ["~> 3.0.3"])
+      s.add_dependency(%q<ruby2ruby>, ["~> 1.2.2"])
     end
   else
-    s.add_dependency(%q<dm-core>, ["= 0.10.0"])
-    s.add_dependency(%q<ParseTree>, ["~> 3.0.2"])
-    s.add_dependency(%q<ruby2ruby>, ["~> 1.2.1"])
+    s.add_dependency(%q<dm-core>, [">= 0"])
+    s.add_dependency(%q<ParseTree>, ["~> 3.0.3"])
+    s.add_dependency(%q<ruby2ruby>, ["~> 1.2.2"])
   end
 end

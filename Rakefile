@@ -13,7 +13,8 @@ EMAIL            = 'dan.kubb [a] gmail [d] com'
 GEM_NAME         = 'dm-ambition'
 GEM_VERSION      = DataMapper::Ambition::VERSION
 GEM_DEPENDENCIES = [
-  [ 'dm-core',   GEM_VERSION ],
+#  [ 'dm-core',   GEM_VERSION ],
+  [ 'dm-core',               ],
   [ 'ParseTree', '~>3.0.3'   ],
   [ 'ruby2ruby', '~>1.2.2'   ],
 ]
