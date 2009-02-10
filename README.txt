@@ -67,6 +67,27 @@ User.select { |u| u == user }
 # using send on receiver
 User.select { |u| u.send(:name) == 'Dan Kubb' }
 
+# with Array#include?
+User.select { |u| user_ids.include?(u.id) }
+
+# with Range#include?
+User.select { |u| (1..10).include?(u.id) }
+
+# with Hash#key?
+User.select { |u| { 1 => 'Dan Kubb' }.key?(u.id) }
+
+# with Hash#value?
+User.select { |u| { 'Dan Kubb' => 1 }.value?(u.id) }
+
+# with receiver and Array#include?
+User.select { |u| users.include?(u) }
+
+# with receiver and Hash#key?
+User.select { |u| { user => 'Dan Kubb' }.key?(u) }
+
+# with receiver and Hash#value?
+User.select { |u| { 'Dan Kubb' => user }.value?(u) }
+
 License
 -------
 
