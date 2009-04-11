@@ -17,9 +17,7 @@ share_examples_for 'it has public filter methods' do
 
       unless loaded
         it 'should not be a kicker' do
-          pending 'TODO: make Collection#equal not a kicker' do
-            @return.should_not be_loaded
-          end
+          @return.should_not be_loaded
         end
       end
 
@@ -64,9 +62,7 @@ share_examples_for 'it has public filter methods' do
 
     unless loaded
       it 'should not be a kicker' do
-        pending 'TODO: make Collection#equal not a kicker' do
-          @return.should_not be_loaded
-        end
+        @return.should_not be_loaded
       end
     end
 

@@ -53,9 +53,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should not be a kicker' do
-              pending 'TODO: make Collection#equal not a kicker' do
-                @return.should_not be_loaded
-              end
+              @return.should_not be_loaded
             end
 
             it 'should return expected values' do
@@ -78,9 +76,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should not be a kicker' do
-              pending 'TODO: make Collection#equal not a kicker' do
-                @return.should_not be_loaded
-              end
+              @return.should_not be_loaded
             end
 
             it 'should return expected values' do
@@ -106,9 +102,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           end
 
           it 'should not be a kicker' do
-            pending 'TODO: make Collection#equal not a kicker' do
-              @return.should_not be_loaded
-            end
+            @return.should_not be_loaded
           end
 
           it 'should return expected values' do
@@ -131,9 +125,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           end
 
           it 'should not be a kicker' do
-            pending 'TODO: make Collection#equal not a kicker' do
-              @return.should_not be_loaded
-            end
+            @return.should_not be_loaded
           end
 
           it 'should return expected values' do
