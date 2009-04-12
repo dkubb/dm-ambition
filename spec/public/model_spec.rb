@@ -12,7 +12,7 @@ describe DataMapper::Ambition::Model do
 
       property :id,    Serial
       property :name,  String
-      property :admin, Boolean
+      property :admin, Boolean, :default => false
     end
 
     if DataMapper.respond_to?(:auto_migrate!)
@@ -24,7 +24,8 @@ describe DataMapper::Ambition::Model do
     @repository = DataMapper.repository(:default)
     @model      = User
 
-    @user = @model.create(:name => 'Dan Kubb')
+    @user  = @model.create(:name => 'Dan Kubb', :admin => true)
+    @other = @model.create(:name => 'Sam Smoot')
 
     @subject = @model
   end

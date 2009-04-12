@@ -14,7 +14,7 @@ module DataMapper
         processor = FilterProcessor.new(block.binding, model, negated)
         processor.process(sexp)
 
-        merge(processor.conditions)
+        merge(:conditions => processor.conditions)
       end
     end # module Query
   end # module Ambition

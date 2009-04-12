@@ -23,8 +23,14 @@ module DataMapper
           @binding    = binding
           @model      = model
           @receiver   = nil
-          @conditions = {}
-          @negated    = negated
+
+          @container = DataMapper::Conditions::BooleanOperation.new(:and)
+
+          if negated
+            @conditions = Conditions::BooleanOperation.new(:not, @container)
+          else
+            @conditions = @container
+          end
         end
 
         def process_error(exp)
@@ -42,11 +48,11 @@ module DataMapper
           result = process(exp.shift)
 
           if result.nil?
-            raise "DEBUG: conditions much be supplied"
+            raise 'DEBUG: conditions must be supplied'
           end
 
-          unless result.equal?(@conditions)
-            raise "DEBUG: invalid result processing body: #{result.inspect}"
+          unless result.equal?(@container)
+            raise "DEBUG: invalid result processing body: #{result.inspect} (expected #{@container.inspect})"
           end
 
           result
@@ -83,17 +89,52 @@ module DataMapper
         end
 
         def process_and(exp)
-          while sexp = exp.shift
-            process(sexp)
+          parent = @container
+
+          begin
+            unless @container.kind_of?(DataMapper::Conditions::AndOperation)
+              parent << @container = DataMapper::Conditions::BooleanOperation.new(:and)
+            end
+
+            while sexp = exp.shift
+              process(sexp)
+            end
+          ensure
+            @container = parent
           end
-          @conditions
+
+          @container
+        end
+
+        def process_or(exp)
+          parent = @container
+
+          begin
+            unless @container.kind_of?(DataMapper::Conditions::OrOperation)
+              parent << @container = DataMapper::Conditions::BooleanOperation.new(:or)
+            end
+
+            while sexp = exp.shift
+              process(sexp)
+            end
+          ensure
+            @container = parent
+          end
+
+          @container
         end
 
         def process_not(exp)
-          @negated = !@negated
-          process(exp.shift)
-        ensure
-          @negated = !@negated
+          parent = @container
+
+          begin
+            parent << @container = DataMapper::Conditions::BooleanOperation.new(:not)
+            process(exp.shift)
+          ensure
+            @container = parent
+          end
+
+          @container
         end
 
         def process_lvar(exp)
@@ -188,7 +229,12 @@ module DataMapper
                 resource.saved? &&
                 !resource.dirty? &&
                 (key = resource.key).all?
-                @conditions.update(@model.key.zip(key).to_hash)
+
+                @model.key.zip(key) do |property, bind_value|
+                  @container << DataMapper::Conditions::Comparison.new(:eql, property, bind_value)
+                end
+
+                @container
               end
             else
               raise "DEBUG: cannot call #{@model.name}.#{operator} with #{rhs.inspect}"
@@ -239,7 +285,8 @@ module DataMapper
 
             operator = remap_operator(operator)
 
-            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
+            @container << DataMapper::Conditions::Comparison.new(operator, property, bind_value)
+            @container
 
           elsif rhs.kind_of?(DataMapper::Property)
             property   = rhs
@@ -252,7 +299,7 @@ module DataMapper
               when Array
                 case operator
                   when :include?, :member?
-                    operator = :==
+                    operator = :in
                   else
                     raise "DEBUG: cannot call Array##{operator} with #{bind_value.inspect}"
                 end
@@ -260,7 +307,7 @@ module DataMapper
               when Range
                 case operator
                   when :include?, :member?, :===
-                    operator = :==
+                    operator = :in
                   else
                     raise "DEBUG: cannot call Range##{operator} with #{bind_value.inspect}"
                 end
@@ -268,10 +315,10 @@ module DataMapper
               when Hash
                 case operator
                   when :key?, :has_key?, :include?, :member?
-                    operator   = :==
+                    operator   = :in
                     bind_value = bind_value.keys
                   when :value?, :has_value?
-                    operator   = :==
+                    operator   = :in
                     bind_value = bind_value.values
                   else
                     raise "DEBUG: cannot call Hash##{operator} with #{bind_value.inspect}"
@@ -280,7 +327,8 @@ module DataMapper
 
             operator = remap_operator(operator)
 
-            @conditions.update(DataMapper::Query::Operator.new(property.name, operator) => bind_value)
+            @container << DataMapper::Conditions::Comparison.new(operator, property, bind_value)
+            @container
 
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *[ rhs ].compact)
@@ -291,15 +339,18 @@ module DataMapper
           end
         end
 
+        # TODO: update dm-core internals to use the Ruby operators
+        # insted of the DM specific ones
         def remap_operator(operator)
           # remap Ruby to DM operators
           case operator
-            when :== then @negated ? :not : :eql
-            when :=~ then @negated ? raise('cannot do negated regexp match yet') : :like
-            when :>  then @negated ? :lte : :gt
-            when :>= then @negated ? :lt  : :gte
-            when :<  then @negated ? :gte : :lt
-            when :<= then @negated ? :gt  : :lte
+            when :in then :in
+            when :== then :eql
+            when :=~ then :regexp
+            when :>  then :gt
+            when :>= then :gte
+            when :<  then :lt
+            when :<= then :lte
             else raise "DEBUG: unknown operator #{operator}"
           end
         end

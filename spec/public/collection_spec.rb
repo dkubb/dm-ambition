@@ -13,7 +13,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
         property :id,    Serial
         property :name,  String
-        property :admin, Boolean
+        property :admin, Boolean, :default => false
       end
 
       if DataMapper.respond_to?(:auto_migrate!)
@@ -26,8 +26,8 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
       @model      = User
       @query      = DataMapper::Query.new(@repository, @model)
 
-      @user  = @model.create(:name => 'Dan Kubb',  :admin => true)
-      @other = @model.create(:name => 'Sam Smoot', :admin => true)
+      @user  = @model.create(:name => 'Dan Kubb', :admin => true)
+      @other = @model.create(:name => 'Sam Smoot')
 
       @subject = @model.all(@query)
       @subject.to_a if loaded
@@ -57,7 +57,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should return expected values' do
-              @return.should == [ @other, @user ]
+              @return.should == [ @user ]
             end
           end
 
@@ -80,7 +80,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should return expected values' do
-              @return.should == [ @user, @other ]
+              @return.should == [ @user ]
             end
           end
         end
@@ -106,7 +106,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           end
 
           it 'should return expected values' do
-            @return.should == [ @other, @user ]
+            @return.should == [ @user ]
           end
         end
 
@@ -129,7 +129,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           end
 
           it 'should return expected values' do
-            @return.should == [ @user, @other ]
+            @return.should == [ @user ]
           end
         end
       end

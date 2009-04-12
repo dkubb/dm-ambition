@@ -63,7 +63,7 @@ describe DataMapper::Ambition::Query do
 
         it 'should set conditions' do
           @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:like, @model.properties[:name], /Dan Kubb/)
+            DataMapper::Conditions::Comparison.new(:regexp, @model.properties[:name], /Dan Kubb/)
           )
         end
       end
@@ -171,7 +171,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :include?, :member?, :=== ].each do |method|
-        describe "Range##{method}" do
+        describe "Range##{method} (inclusive)" do
           before :all do
             @return = @subject.filter { |u| (1..2).send(method, u.id) }
           end
@@ -187,6 +187,26 @@ describe DataMapper::Ambition::Query do
           it 'should set conditions' do
             @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
               DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], 1..2)
+            )
+          end
+        end
+
+        describe "Range##{method} (exclusive)" do
+          before :all do
+            @return = @subject.filter { |u| (1...3).send(method, u.id) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
+              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], 1...3)
             )
           end
         end
@@ -334,10 +354,33 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.operands.sort_by { |o| o.property.name.to_s }.should == [
+          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
             DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
             DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
-          ]
+          )
+        end
+      end
+
+      describe 'ORed' do
+        before :all do
+          @return = @subject.filter { |u| u.id == 1 || u.name == 'Dan Kubb' }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
+            DataMapper::Conditions::BooleanOperation.new(:or,
+              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
+              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+            )
+          )
         end
       end
 
@@ -378,7 +421,11 @@ describe DataMapper::Ambition::Query do
 
         it 'should set conditions' do
           @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+            DataMapper::Conditions::BooleanOperation.new(:not,
+              DataMapper::Conditions::BooleanOperation.new(:not,
+                DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+              )
+            )
           )
         end
       end
@@ -421,8 +468,10 @@ describe DataMapper::Ambition::Query do
             @return.should_not equal(@subject)
           end
 
-          it 'should return expected Query' do
-            @return.should == DataMapper::Query.new(@repository, @model, :id => [ 1 ])
+          it 'should set conditions' do
+            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
+              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1 ])
+            )
           end
         end
       end
