@@ -1,10 +1,7 @@
 require 'rubygems'
 
-gem 'ParseTree', '~>3.0.3'
 require 'parse_tree'
 require 'parse_tree_extensions'
-
-gem 'ruby2ruby', '~>1.2.2'
 require 'ruby2ruby'
 
 module DataMapper
