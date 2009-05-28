@@ -188,7 +188,9 @@ module DataMapper
         end
 
         def process_lit(exp)
-          exp.shift
+          literal = exp.shift
+          exp.shift  # FIXME: workaround for bug in ParseTree or SexpProcessor
+          literal
         end
 
         def process_true(exp)
