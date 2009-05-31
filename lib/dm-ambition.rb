@@ -1,17 +1,11 @@
 require 'pathname'
-require 'rubygems'
 
 dir = Pathname(__FILE__).dirname.expand_path + 'dm-ambition'
-
-require dir + 'version'
-
-#gem 'dm-core', DataMapper::Ambition::VERSION
-require 'dm-core'
-require 'dm-core/version'
 
 require dir / 'collection'
 require dir / 'model'
 require dir / 'query'
+require dir / 'version'
 
 module DataMapper
   class Collection

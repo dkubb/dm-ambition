@@ -1,5 +1,3 @@
-require 'rubygems'
-
 require 'parse_tree'
 require 'parse_tree_extensions'
 require 'ruby2ruby'
@@ -21,10 +19,10 @@ module DataMapper
           @model      = model
           @receiver   = nil
 
-          @container = DataMapper::Conditions::BooleanOperation.new(:and)
+          @container = DataMapper::Query::Conditions::Operation.new(:and)
 
           if negated
-            @conditions = Conditions::BooleanOperation.new(:not, @container)
+            @conditions = DataMapper::Query::Conditions::Operation.new(:not, @container)
           else
             @conditions = @container
           end
@@ -89,8 +87,8 @@ module DataMapper
           parent = @container
 
           begin
-            unless @container.kind_of?(DataMapper::Conditions::AndOperation)
-              parent << @container = DataMapper::Conditions::BooleanOperation.new(:and)
+            unless @container.kind_of?(DataMapper::Query::Conditions::AndOperation)
+              parent << @container = DataMapper::Query::Conditions::Operation.new(:and)
             end
 
             while sexp = exp.shift
@@ -107,8 +105,8 @@ module DataMapper
           parent = @container
 
           begin
-            unless @container.kind_of?(DataMapper::Conditions::OrOperation)
-              parent << @container = DataMapper::Conditions::BooleanOperation.new(:or)
+            unless @container.kind_of?(DataMapper::Query::Conditions::OrOperation)
+              parent << @container = DataMapper::Query::Conditions::Operation.new(:or)
             end
 
             while sexp = exp.shift
@@ -125,7 +123,7 @@ module DataMapper
           parent = @container
 
           begin
-            parent << @container = DataMapper::Conditions::BooleanOperation.new(:not)
+            parent << @container = DataMapper::Query::Conditions::Operation.new(:not)
             process(exp.shift)
           ensure
             @container = parent
@@ -230,7 +228,7 @@ module DataMapper
                 (key = resource.key).all?
 
                 @model.key.zip(key) do |property, bind_value|
-                  @container << DataMapper::Conditions::Comparison.new(:eql, property, bind_value)
+                  @container << DataMapper::Query::Conditions::Comparison.new(:eql, property, bind_value)
                 end
 
                 @container
@@ -284,7 +282,7 @@ module DataMapper
 
             operator = remap_operator(operator)
 
-            @container << DataMapper::Conditions::Comparison.new(operator, property, bind_value)
+            @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
             @container
 
           elsif rhs.kind_of?(DataMapper::Property)
@@ -326,7 +324,7 @@ module DataMapper
 
             operator = remap_operator(operator)
 
-            @container << DataMapper::Conditions::Comparison.new(operator, property, bind_value)
+            @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
             @container
 
           elsif lhs.respond_to?(operator)

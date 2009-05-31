@@ -42,8 +42,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
@@ -62,8 +62,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:regexp, @model.properties[:name], /Dan Kubb/)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:regexp, @model.properties[:name], /Dan Kubb/)
           )
         end
       end
@@ -82,8 +82,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:gt, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:gt, @model.properties[:id], 1)
           )
         end
       end
@@ -102,8 +102,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:gte, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:gte, @model.properties[:id], 1)
           )
         end
       end
@@ -122,8 +122,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:lt, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:lt, @model.properties[:id], 1)
           )
         end
       end
@@ -142,8 +142,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:lte, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:lte, @model.properties[:id], 1)
           )
         end
       end
@@ -163,8 +163,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
@@ -185,8 +185,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], 1..2)
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], 1..2)
             )
           end
         end
@@ -205,8 +205,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], 1...3)
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], 1...3)
             )
           end
         end
@@ -227,8 +227,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
@@ -249,8 +249,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
@@ -270,8 +270,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], nil)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], nil)
           )
         end
       end
@@ -292,8 +292,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], nil)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], nil)
           )
         end
       end
@@ -312,8 +312,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:admin], true)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:admin], true)
           )
         end
       end
@@ -332,8 +332,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:admin], false)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:admin], false)
           )
         end
       end
@@ -354,9 +354,9 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
@@ -375,10 +375,10 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::BooleanOperation.new(:or,
-              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
-              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Operation.new(:or,
+              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id],   1),
+              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
             )
           )
         end
@@ -398,9 +398,9 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::BooleanOperation.new(:not,
-              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Operation.new(:not,
+              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
             )
           )
         end
@@ -420,10 +420,10 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::BooleanOperation.new(:not,
-              DataMapper::Conditions::BooleanOperation.new(:not,
-                DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Operation.new(:not,
+              DataMapper::Query::Conditions::Operation.new(:not,
+                DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
               )
             )
           )
@@ -446,8 +446,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
           )
         end
       end
@@ -469,8 +469,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1 ])
             )
           end
         end
@@ -494,8 +494,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
@@ -519,8 +519,8 @@ describe DataMapper::Ambition::Query do
           end
 
           it 'should set conditions' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
@@ -540,8 +540,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
@@ -564,8 +564,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
@@ -586,8 +586,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], @name)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], @name)
           )
         end
       end
@@ -608,8 +608,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], $name)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], $name)
           )
         end
       end
@@ -633,8 +633,8 @@ describe DataMapper::Ambition::Query do
 
         it 'should set conditions' do
           pending 'TODO: make methods work inside block' do
-            @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-              DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], name)
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], name)
             )
           end
         end
@@ -656,8 +656,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], NAME)
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], NAME)
           )
         end
       end
@@ -681,8 +681,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
@@ -708,8 +708,8 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          @return.conditions.should == DataMapper::Conditions::BooleanOperation.new(:and,
-            DataMapper::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
           )
         end
       end
