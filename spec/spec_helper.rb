@@ -2,7 +2,7 @@ require 'pathname'
 require 'rubygems'
 require 'spec'
 
-gem 'dm-core', '0.10.0'
+gem 'dm-core', '~>0.10.2'
 require 'dm-core'
 
 SPEC_ROOT = Pathname(__FILE__).dirname.expand_path
