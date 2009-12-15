@@ -18,7 +18,8 @@ Gem::Specification.new do |s|
      "TODO"
   ]
   s.files = [
-    ".gitignore",
+    ".document",
+     ".gitignore",
      "LICENSE",
      "Manifest.txt",
      "README.rdoc",
@@ -34,9 +35,17 @@ Gem::Specification.new do |s|
      "spec/public/collection_spec.rb",
      "spec/public/model_spec.rb",
      "spec/public/shared/filter_shared_spec.rb",
+     "spec/rcov.opts",
      "spec/semipublic/query_spec.rb",
      "spec/spec.opts",
-     "spec/spec_helper.rb"
+     "spec/spec_helper.rb",
+     "tasks/ci.rake",
+     "tasks/clean.rake",
+     "tasks/heckle.rake",
+     "tasks/metrics.rake",
+     "tasks/spec.rake",
+     "tasks/yard.rake",
+     "tasks/yardstick.rake"
   ]
   s.homepage = %q{http://github.com/dkubb/dm-ambition}
   s.rdoc_options = ["--charset=UTF-8"]
