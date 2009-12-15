@@ -1,31 +1,38 @@
-require 'pathname'
 require 'rubygems'
+require 'rake'
 
-ROOT    = Pathname(__FILE__).dirname.expand_path
-JRUBY   = RUBY_PLATFORM =~ /java/
-WINDOWS = Gem.win_platform?
-SUDO    = (WINDOWS || JRUBY) ? '' : ('sudo' unless ENV['SUDOLESS'])
+require File.expand_path('../lib/dm-ambition/version', __FILE__)
 
-require ROOT + 'lib/dm-ambition/version'
+begin
+  gem 'jeweler', '~> 1.4'
+  require 'jeweler'
 
-AUTHOR           = 'Dan Kubb'
-EMAIL            = 'dan.kubb [a] gmail [d] com'
-GEM_NAME         = 'dm-ambition'
-GEM_VERSION      = DataMapper::Ambition::VERSION
-GEM_DEPENDENCIES = [
-  [ 'dm-core',   '~>0.10' ],
-  [ 'ParseTree', '~>3.0'  ],
-  [ 'ruby2ruby', '~>1.2'  ],
-]
+  Jeweler::Tasks.new do |gem|
+    gem.name        = 'dm-ambition'
+    gem.summary     = 'DataMapper plugin providing an Ambition-like API'
+    gem.description = gem.summary
+    gem.email       = 'dan.kubb@gmail.com'
+    gem.homepage    = 'http://github.com/dkubb/%s' % gem.name
+    gem.authors     = [ 'Dan Kubb' ]
 
-GEM_CLEAN  = %w[ log pkg coverage ]
-GEM_EXTRAS = { :has_rdoc => true, :extra_rdoc_files => %w[ README.txt LICENSE TODO History.txt ] }
+    gem.version = DataMapper::Ambition::VERSION
 
-PROJECT_NAME        = 'dm-ambition'
-PROJECT_URL         = "http://github.com/dkubb/#{GEM_NAME}"
-PROJECT_DESCRIPTION = PROJECT_SUMMARY = 'DataMapper plugin providing an Ambition-like API'
+    gem.rubyforge_project = 'dm-ambition'
 
-#[ ROOT, ROOT.parent ].each do |dir|
-[ ROOT ].each do |dir|
-  Pathname.glob(dir.join('tasks/**/*.rb').to_s).each { |f| require f }
+    gem.add_dependency 'dm-core',   '~> 0.10.2'
+    gem.add_dependency 'ParseTree', '~> 3.0.4'
+    gem.add_dependency 'ruby2ruby', '~> 1.2.4'
+
+    gem.add_development_dependency 'rspec', '~> 1.2.9'
+    gem.add_development_dependency 'yard',  '~> 0.4.0'
+  end
+
+  Jeweler::GemcutterTasks.new
+  Jeweler::RubyforgeTasks.new do |rubyforge|
+    rubyforge.doc_task = 'yardoc'
+  end
+
+  FileList['tasks/**/*.rake'].each { |task| import task }
+rescue LoadError
+  puts 'Jeweler (or a dependency) not available. Install it with: gem install jeweler'
 end

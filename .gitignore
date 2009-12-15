@@ -1,13 +1,22 @@
-*.log
-log/*
-doc
-cov
-pkg
+## MAC OS
 .DS_Store
-coverage.html
-coverage/*
-*.db
+
+## TEXTMATE
+*.tmproj
+tmtags
+
+## EMACS
+*~
 \#*
-_Yardoc
-.yardoc
-tmp/*
+.\#*
+
+## VIM
+*.swp
+
+## PROJECT::GENERAL
+coverage
+rdoc
+pkg
+tmp
+
+## PROJECT::SPECIFIC
