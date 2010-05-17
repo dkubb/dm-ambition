@@ -24,7 +24,6 @@ begin
     gem.add_dependency 'ruby2ruby', '~> 1.2.4'
 
     gem.add_development_dependency 'rspec', '~> 1.2.9'
-    gem.add_development_dependency 'yard',  '~> 0.4.0'
   end
 
   Jeweler::GemcutterTasks.new
