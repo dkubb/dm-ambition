@@ -3,6 +3,7 @@ require 'rubygems'
 require 'spec'
 
 require 'dm-core'
+require 'dm-migrations'
 
 SPEC_ROOT = Pathname(__FILE__).dirname.expand_path
 require SPEC_ROOT.parent / 'lib' / 'dm-ambition'
