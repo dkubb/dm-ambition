@@ -1,5 +1,5 @@
 module DataMapper
   module Ambition
-    VERSION = '0.10.2'.freeze
+    VERSION = '1.0.0.rc1'
   end
 end

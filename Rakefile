@@ -19,7 +19,7 @@ begin
 
     gem.rubyforge_project = 'dm-ambition'
 
-    gem.add_dependency 'dm-core',   '~> 0.10.2'
+    gem.add_dependency 'dm-core',   '~> 1.0.0.rc1'
     gem.add_dependency 'ParseTree', '~> 3.0.4'
     gem.add_dependency 'ruby2ruby', '~> 1.2.4'
 
