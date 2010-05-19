@@ -23,7 +23,7 @@ begin
     gem.add_dependency 'ParseTree', '~> 3.0.4'
     gem.add_dependency 'ruby2ruby', '~> 1.2.4'
 
-    gem.add_development_dependency 'rspec', '~> 1.2.9'
+    gem.add_development_dependency 'rspec', '~> 1.3'
   end
 
   Jeweler::GemcutterTasks.new
