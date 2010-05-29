@@ -4,15 +4,7 @@ require 'dm-ambition/query'
 require 'dm-ambition/version'
 
 module DataMapper
-  class Collection
-    include Ambition::Collection
-  end
-
-  module Model
-    include Ambition::Model
-  end
-
-  class Query
-    include Ambition::Query
+  [ :Collection, :Model, :Query ].each do |mod|
+    const_get(mod).send(:include, Ambition.const_get(mod))
   end
 end
