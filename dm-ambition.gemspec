@@ -50,6 +50,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/dkubb/dm-ambition}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
+  s.required_ruby_version = Gem::Requirement.new("~> 1.8.6")
   s.rubyforge_project = %q{dm-ambition}
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{DataMapper plugin providing an Ambition-like API}
