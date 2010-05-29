@@ -5,6 +5,6 @@ require 'dm-ambition/version'
 
 module DataMapper
   [ :Collection, :Model, :Query ].each do |mod|
-    const_get(mod).send(:include, Ambition.const_get(mod))
+    const_get(mod).class_eval { include Ambition.const_get(mod) }
   end
 end
