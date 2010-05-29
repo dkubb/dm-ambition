@@ -1,11 +1,7 @@
-require 'pathname'
-
-dir = Pathname(__FILE__).dirname.expand_path + 'dm-ambition'
-
-require dir / 'collection'
-require dir / 'model'
-require dir / 'query'
-require dir / 'version'
+require 'dm-ambition/collection'
+require 'dm-ambition/model'
+require 'dm-ambition/query'
+require 'dm-ambition/version'
 
 module DataMapper
   class Collection
