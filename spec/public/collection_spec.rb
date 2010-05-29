@@ -3,7 +3,9 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
 [ false, true ].each do |loaded|
   describe DataMapper::Ambition::Collection do
-    cattr_accessor :loaded
+    class << self
+      attr_accessor :loaded
+    end
 
     self.loaded = loaded
 
