@@ -1,3 +1,4 @@
+require 'dm-core'
 require 'dm-ambition/collection'
 require 'dm-ambition/model'
 require 'dm-ambition/query'
