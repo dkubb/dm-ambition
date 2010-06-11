@@ -7,7 +7,7 @@ accessing DataMapper models.
 
 With Rubygems:
 
-  $ sudo gem install dm-ambition
+  $ gem install dm-ambition
   $ irb -rubygems
   >> require 'dm-ambition'
   => true
@@ -16,7 +16,7 @@ With git and local working copy:
 
   $ git clone git://github.com/dkubb/dm-ambition.git
   $ cd dm-ambition
-  $ rake build && sudo rake install
+  $ rake install
   $ irb -rubygems
   >> require 'dm-ambition'
   => true
