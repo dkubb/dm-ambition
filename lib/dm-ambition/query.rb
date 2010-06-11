@@ -1,3 +1,5 @@
+require 'dm-ambition/query/filter_processor'
+
 module DataMapper
   module Ambition
     module Query
@@ -19,5 +21,3 @@ module DataMapper
     end # module Query
   end # module Ambition
 end # module DataMapper
-
-require Pathname(__FILE__).dirname.expand_path / 'query' / 'filter_processor'
