@@ -21,6 +21,14 @@ With git and local working copy:
   >> require 'dm-ambition'
   => true
 
+== Testing
+
+The simplest way to test is with Bundler since it handles all dependencies:
+
+  $ rake local_gemfile
+  $ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle install --without=quality --relock
+  $ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle exec rake spec
+
 == Examples
 
     # with == operator
