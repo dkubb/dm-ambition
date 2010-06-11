@@ -9,7 +9,6 @@ With Rubygems:
 
   $ sudo gem install dm-ambition
   $ irb -rubygems
-  >> require 'dm-core'
   >> require 'dm-ambition'
   => true
 
@@ -19,7 +18,6 @@ With git and local working copy:
   $ cd dm-ambition
   $ rake build && sudo rake install
   $ irb -rubygems
-  >> require 'dm-core'
   >> require 'dm-ambition'
   => true
 
