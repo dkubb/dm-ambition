@@ -15,20 +15,17 @@ describe DataMapper::Ambition::Model do
       property :admin, Boolean, :default => false
     end
 
-    if DataMapper.respond_to?(:auto_migrate!)
-      DataMapper.auto_migrate!
-    end
-  end
-
-  before :all do
-    @repository = DataMapper.repository(:default)
     @model      = User
-
-    @user  = @model.create(:name => 'Dan Kubb', :admin => true)
-    @other = @model.create(:name => 'Sam Smoot')
-
-    @subject = @model
   end
 
-  it_should_behave_like 'it has public filter methods'
+  supported_by :all do
+    before :all do
+      @user  = @model.create(:name => 'Dan Kubb', :admin => true)
+      @other = @model.create(:name => 'Sam Smoot')
+
+      @subject = @model
+    end
+
+    it_should_behave_like 'it has public filter methods'
+  end
 end

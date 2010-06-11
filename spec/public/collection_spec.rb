@@ -18,32 +18,78 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
         property :admin, Boolean, :default => false
       end
 
-      if DataMapper.respond_to?(:auto_migrate!)
-        DataMapper.auto_migrate!
+      @model = User
+    end
+
+    supported_by :all do
+      before :all do
+        @query = DataMapper::Query.new(@repository, @model)
+
+        @user  = @model.create(:name => 'Dan Kubb', :admin => true)
+        @other = @model.create(:name => 'Sam Smoot')
+
+        @subject = @model.all(@query)
+        @subject.to_a if loaded
       end
-    end
 
-    before :all do
-      @repository = DataMapper.repository(:default)
-      @model      = User
-      @query      = DataMapper::Query.new(@repository, @model)
+      it_should_behave_like 'it has public filter methods'
 
-      @user  = @model.create(:name => 'Dan Kubb', :admin => true)
-      @other = @model.create(:name => 'Sam Smoot')
+      unless loaded
+        [ :select, :find_all ].each do |method|
+          describe "##{method}", '(unloaded)' do
+            describe 'when matching resource prepended' do
+              before :all do
+                @subject.unshift(@other)
+                @return = @subject.send(method) { |u| u.admin == true }
+              end
 
-      @subject = @model.all(@query)
-      @subject.to_a if loaded
-    end
+              it 'should return a Collection' do
+                @return.should be_kind_of(DataMapper::Collection)
+              end
 
-    it_should_behave_like 'it has public filter methods'
+              it 'should not return self' do
+                @return.should_not equal(@subject)
+              end
 
-    unless loaded
-      [ :select, :find_all ].each do |method|
-        describe "##{method}", '(unloaded)' do
+              it 'should not be a kicker' do
+                @return.should_not be_loaded
+              end
+
+              it 'should return expected values' do
+                @return.should == [ @user ]
+              end
+            end
+
+            describe 'when matching resource appended' do
+              before :all do
+                @subject << @other
+                @return = @subject.send(method) { |u| u.admin == true }
+              end
+
+              it 'should return a Collection' do
+                @return.should be_kind_of(DataMapper::Collection)
+              end
+
+              it 'should not return self' do
+                @return.should_not equal(@subject)
+              end
+
+              it 'should not be a kicker' do
+                @return.should_not be_loaded
+              end
+
+              it 'should return expected values' do
+                @return.should == [ @user ]
+              end
+            end
+          end
+        end
+
+        describe '#reject', '(unloaded)' do
           describe 'when matching resource prepended' do
             before :all do
               @subject.unshift(@other)
-              @return = @subject.send(method) { |u| u.admin == true }
+              @return = @subject.reject { |u| u.admin != true }
             end
 
             it 'should return a Collection' do
@@ -66,7 +112,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           describe 'when matching resource appended' do
             before :all do
               @subject << @other
-              @return = @subject.send(method) { |u| u.admin == true }
+              @return = @subject.reject { |u| u.admin != true }
             end
 
             it 'should return a Collection' do
@@ -84,54 +130,6 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             it 'should return expected values' do
               @return.should == [ @user ]
             end
-          end
-        end
-      end
-
-      describe '#reject', '(unloaded)' do
-        describe 'when matching resource prepended' do
-          before :all do
-            @subject.unshift(@other)
-            @return = @subject.reject { |u| u.admin != true }
-          end
-
-          it 'should return a Collection' do
-            @return.should be_kind_of(DataMapper::Collection)
-          end
-
-          it 'should not return self' do
-            @return.should_not equal(@subject)
-          end
-
-          it 'should not be a kicker' do
-            @return.should_not be_loaded
-          end
-
-          it 'should return expected values' do
-            @return.should == [ @user ]
-          end
-        end
-
-        describe 'when matching resource appended' do
-          before :all do
-            @subject << @other
-            @return = @subject.reject { |u| u.admin != true }
-          end
-
-          it 'should return a Collection' do
-            @return.should be_kind_of(DataMapper::Collection)
-          end
-
-          it 'should not return self' do
-            @return.should_not equal(@subject)
-          end
-
-          it 'should not be a kicker' do
-            @return.should_not be_loaded
-          end
-
-          it 'should return expected values' do
-            @return.should == [ @user ]
           end
         end
       end
