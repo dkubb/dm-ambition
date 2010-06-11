@@ -37,7 +37,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
     it_should_behave_like 'it has public filter methods'
 
-    unless loaded || Gem::Version.new(DataMapper::VERSION) < Gem::Version.new('0.10')
+    unless loaded
       [ :select, :find_all ].each do |method|
         describe "##{method}", '(unloaded)' do
           describe 'when matching resource prepended' do
