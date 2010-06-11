@@ -22,7 +22,7 @@ begin
     gem.rubyforge_project = 'dm-ambition'
 
     gem.add_dependency 'dm-core',   '~> 1.0.0'
-    gem.add_dependency 'ParseTree', '~> 3.0.5'
+    gem.add_dependency 'ParseTree', '~> 3.0.5' unless defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
     gem.add_dependency 'ruby2ruby', '~> 1.2.4'
 
     gem.add_development_dependency 'dm-migrations', '~> 1.0.0'

@@ -1,5 +1,8 @@
-require 'parse_tree'
-require 'parse_tree_extensions'
+unless defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+  require 'parse_tree'
+  require 'parse_tree_extensions'
+end
+
 require 'ruby2ruby'
 
 module DataMapper

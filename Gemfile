@@ -82,7 +82,7 @@ group :runtime do # Runtime dependencies (as in the gemspec)
   end
 
   gem 'dm-core',        DM_VERSION, :git => "#{DATAMAPPER}/dm-core.git"
-  gem 'ParseTree',      '~> 3.0.5'
+  gem 'ParseTree',      '~> 3.0.5' unless defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
   gem 'ruby2ruby',      '~> 1.2.4'
 
 end
