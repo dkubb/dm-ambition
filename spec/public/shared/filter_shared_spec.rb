@@ -25,6 +25,10 @@ share_examples_for 'it has public filter methods' do
         it 'should return expected values' do
           @return.should == [ @user ]
         end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| u.name == 'Dan Kubb' }
+        end
       end
 
       describe 'with OR + AND conditions' do
@@ -49,6 +53,10 @@ share_examples_for 'it has public filter methods' do
         it 'should return expected values' do
           @return.should == [ @user ]
         end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
+        end
       end
 
       describe 'with AND + OR conditions' do
@@ -72,6 +80,10 @@ share_examples_for 'it has public filter methods' do
 
         it 'should return expected values' do
           @return.should == [ @user, @other ]
+        end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
         end
       end
     end
@@ -99,6 +111,10 @@ share_examples_for 'it has public filter methods' do
         it 'should return expected value' do
           @return.should == @user
         end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| u.name == 'Dan Kubb' }
+        end
       end
 
       describe 'with OR + AND conditions' do
@@ -119,6 +135,10 @@ share_examples_for 'it has public filter methods' do
         it 'should return expected value' do
           @return.should == @user
         end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
+        end
       end
 
       describe 'with AND + OR conditions' do
@@ -138,6 +158,10 @@ share_examples_for 'it has public filter methods' do
 
         it 'should return expected value' do
           @return.should == @user
+        end
+
+        it "should return the same as Array##{method}" do
+          @return.should == @subject.to_a.send(method) { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
         end
       end
     end
@@ -168,6 +192,10 @@ share_examples_for 'it has public filter methods' do
       it 'should return expected values' do
         @return.should == [ @user ]
       end
+
+      it 'should return the same as Array#reject' do
+        @return.should == @subject.to_a.reject { |u| u.name != 'Dan Kubb' }
+      end
     end
 
     describe 'with OR + AND conditions' do
@@ -192,6 +220,10 @@ share_examples_for 'it has public filter methods' do
       it 'should return expected values' do
         @return.should == [ @other ]
       end
+
+      it 'should return the same as Array#reject' do
+        @return.should == @subject.to_a.reject { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
+      end
     end
 
     describe 'with AND + OR conditions' do
@@ -215,6 +247,10 @@ share_examples_for 'it has public filter methods' do
 
       it 'should return expected values' do
         @return.should == []
+      end
+
+      it 'should return the same as Array#reject' do
+        @return.should == @subject.to_a.reject { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
       end
     end
   end

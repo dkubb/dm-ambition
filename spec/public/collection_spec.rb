@@ -58,6 +58,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
               it 'should return expected values' do
                 @return.should == [ @user ]
               end
+
+              it "should return the same as Array##{method}" do
+                @return.should == @subject.to_a.send(method) { |u| u.admin == true }
+              end
             end
 
             describe 'when matching resource appended' do
@@ -80,6 +84,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
               it 'should return expected values' do
                 @return.should == [ @user ]
+              end
+
+              it "should return the same as Array##{method}" do
+                @return.should == @subject.to_a.send(method) { |u| u.admin == true }
               end
             end
           end
@@ -107,6 +115,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             it 'should return expected values' do
               @return.should == [ @user ]
             end
+
+            it 'should return the same as Array#reject' do
+              @return.should == @subject.to_a.reject { |u| u.admin != true }
+            end
           end
 
           describe 'when matching resource appended' do
@@ -129,6 +141,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
             it 'should return expected values' do
               @return.should == [ @user ]
+            end
+
+            it 'should return the same as Array#reject' do
+              @return.should == @subject.to_a.reject { |u| u.admin != true }
             end
           end
         end
