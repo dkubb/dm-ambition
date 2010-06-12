@@ -1,0 +1,6 @@
+* Refactor specs to use one spec file per public method
+
+* Heckle the methods to make sure that the specs cover all branches
+  within the code.
+  * The purpose of this is to make sure we have good test cases
+    to use with a Veritas port in the future.
