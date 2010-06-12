@@ -22,12 +22,10 @@ module DataMapper
           @model      = model
           @receiver   = nil
 
-          @container = DataMapper::Query::Conditions::Operation.new(:and)
+          @conditions = @container = DataMapper::Query::Conditions::Operation.new(:and)
 
           if negated
             @conditions = DataMapper::Query::Conditions::Operation.new(:not, @container)
-          else
-            @conditions = @container
           end
         end
 
