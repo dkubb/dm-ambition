@@ -4,3 +4,16 @@
   within the code.
   * The purpose of this is to make sure we have good test cases
     to use with a Veritas port in the future.
+
+* Changes to dm-core
+  * Update Collection#select in dm-core to return a Collection
+  * Update Collection#reject in dm-core to return a Collection
+  * Update Model#select in dm-core to return a Collection
+  * Update Model#reject in dm-core to return a Collection
+
+* Add to Model and Collection:
+  * Add #empty?
+  * Add #any?  (handle with and without block)
+  * Add #all?  (handle with and without block)
+  * Add #none? (handle with and without block) (add to LazyArray for < 1.9)
+  * Add #one?  (handle with and without block) (add to LazyArray for < 1.9)

@@ -1,6 +1,3 @@
-# TODO: update Collection#select in dm-core to return a Collection
-# TODO: update Collection#reject in dm-core to return a Collection
-
 module DataMapper
   module Ambition
     module Collection
@@ -8,12 +5,6 @@ module DataMapper
         base.send(:alias_method, :find_all, :select)
         base.send(:alias_method, :find,     :detect)
       end
-
-      # TODO: add empty?
-      # TODO: add any?  (handle with and without block)
-      # TODO: add all?  (handle with and without block)
-      # TODO: add none? (handle with and without block) (add to LazyArray for < 1.9)
-      # TODO: add one?  (handle with and without block) (add to LazyArray for < 1.9)
 
       # TODO: document this
       # @api public
