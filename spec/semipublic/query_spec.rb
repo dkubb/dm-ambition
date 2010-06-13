@@ -421,11 +421,7 @@ describe DataMapper::Ambition::Query do
 
         it 'should set conditions' do
           @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
-            DataMapper::Query::Conditions::Operation.new(:not,
-              DataMapper::Query::Conditions::Operation.new(:not,
-                DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
-              )
-            )
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
           )
         end
       end
