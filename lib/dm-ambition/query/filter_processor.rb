@@ -29,29 +29,14 @@ module DataMapper
           end
         end
 
-        def process_error(exp)
-          raise "DEBUG: calling process_#{exp.shift} with #{exp.inspect} (in process_error)"
-        end
-
         def process_iter(exp)
           call_argslist = exp.shift
-          raise "DEBUG: invalid: #{call_argslist.inspct}" if call_argslist != s(:call, nil, :proc, s(:arglist))
 
           # get the reciever
           @receiver = process(exp.shift)
 
           # process the Proc body
-          result = process(exp.shift)
-
-          if result.nil?
-            raise 'DEBUG: conditions must be supplied'
-          end
-
-          unless result.equal?(@container)
-            raise "DEBUG: invalid result processing body: #{result.inspect} (expected #{@container.inspect})"
-          end
-
-          result
+          process(exp.shift)
         end
 
         def process_lasgn(exp)
@@ -59,29 +44,15 @@ module DataMapper
         end
 
         def process_call(exp)
-          if exp.size == 3
-            lhs      = process(exp.shift)
-            operator = exp.shift
-            rhs      = process(exp.shift)
+          lhs      = process(exp.shift)
+          operator = exp.shift
+          rhs      = process(exp.shift)
 
-            if operator == :send
-              operator = rhs.shift
-            end
+          return nil if lhs.nil?
 
-            if rhs.size > 1
-              raise "DEBUG: rhs.size should not be larger than 1, but was #{rhs.size}: #{rhs.inspect}"
-            else
-              rhs = rhs.first
-            end
+          operator = rhs.shift if operator == :send
 
-            if lhs.nil?
-              nil
-            else
-              evaluate_operator(operator, lhs, rhs)
-            end
-          else
-            raise "DEBUG: unhandled call: #{exp.inspect}"
-          end
+          evaluate_operator(operator, lhs, rhs.shift)
         end
 
         def process_and(exp)
@@ -213,10 +184,6 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
-          if operator == :=~ && !lhs.kind_of?(Regexp) && !rhs.kind_of?(Regexp)
-            raise "DEBUG: when using =~ operator one side should be a Regexp"
-          end
-
           if lhs == @model
             if rhs.nil?
               @model.properties[operator]
@@ -230,8 +197,6 @@ module DataMapper
 
                 @container
               end
-            else
-              raise "DEBUG: cannot call #{@model.name}.#{operator} with #{rhs.inspect}"
             end
 
           elsif rhs == @model
@@ -250,14 +215,6 @@ module DataMapper
                   when :key?, :has_key?, :include?, :member? then lhs.keys
                   when :value?, :has_value?                  then lhs.values
                 end
-            end
-
-            unless resources
-              raise "DEBUG: cannot call #{lhs.class}##{operator} with #{rhs.inspect}"
-            end
-
-            unless resources.all? { |r| r.kind_of?(DataMapper::Resource) }
-              raise 'cannot compare against a non-resource'
             end
 
             property   = @model.key.first
@@ -294,16 +251,12 @@ module DataMapper
                 case operator
                   when :include?, :member?
                     operator = :in
-                  else
-                    raise "DEBUG: cannot call Array##{operator} with #{bind_value.inspect}"
                 end
 
               when Range
                 case operator
                   when :include?, :member?, :===
                     operator = :in
-                  else
-                    raise "DEBUG: cannot call Range##{operator} with #{bind_value.inspect}"
                 end
 
               when Hash
@@ -314,8 +267,6 @@ module DataMapper
                   when :value?, :has_value?
                     operator   = :in
                     bind_value = bind_value.values
-                  else
-                    raise "DEBUG: cannot call Hash##{operator} with #{bind_value.inspect}"
                 end
             end
 
@@ -326,9 +277,6 @@ module DataMapper
 
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *[ rhs ].compact)
-
-          else
-            raise "DEBUG: not handled: #{lhs.inspect} #{operator} #{rhs.inspect}"
 
           end
         end
@@ -345,7 +293,6 @@ module DataMapper
             when :>= then :gte
             when :<  then :lt
             when :<= then :lte
-            else raise "DEBUG: unknown operator #{operator}"
           end
         end
 
