@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dan Kubb"]
-  s.date = %q{2010-06-08}
+  s.date = %q{2010-06-13}
   s.description = %q{DataMapper plugin providing an Ambition-like API}
   s.email = %q{dan.kubb@gmail.com}
   s.extra_rdoc_files = [
@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
      ".gitignore",
+     "Gemfile",
      "LICENSE",
      "Manifest.txt",
      "README.rdoc",
@@ -42,6 +43,7 @@ Gem::Specification.new do |s|
      "tasks/ci.rake",
      "tasks/clean.rake",
      "tasks/heckle.rake",
+     "tasks/local_gemfile.rake",
      "tasks/metrics.rake",
      "tasks/spec.rake",
      "tasks/yard.rake",
