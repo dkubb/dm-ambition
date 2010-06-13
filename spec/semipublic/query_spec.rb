@@ -11,6 +11,13 @@ describe DataMapper::Ambition::Query do
       property :admin, Boolean
     end
 
+    class ::Person
+      include DataMapper::Resource
+
+      property :first_name, String, :key => true
+      property :last_name,  String, :key => true
+    end
+
     if DataMapper.respond_to?(:auto_migrate!)
       DataMapper.auto_migrate!
     end
@@ -468,6 +475,41 @@ describe DataMapper::Ambition::Query do
           it 'should set conditions' do
             @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
               DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
+            )
+          end
+        end
+
+        describe "receiver matching a resource (with a CPK) using Array##{method}" do
+          before :all do
+            @model   = Person
+            @subject = DataMapper::Query.new(@repository, @model)
+
+            @one = @model.new(:first_name => 'Dan',  :last_name => 'Kubb')
+            @two = @model.new(:first_name => 'John', :last_name => 'Doe')
+
+            @return = @subject.filter { |p| [ @one, @two ].send(method, p) }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Operation.new(:or,
+                DataMapper::Query::Conditions::Operation.new(:and,
+                  DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:first_name], 'Dan'),
+                  DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:last_name],  'Kubb')
+                ),
+                DataMapper::Query::Conditions::Operation.new(:and,
+                  DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:first_name], 'John'),
+                  DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:last_name],  'Doe')
+                )
+              )
             )
           end
         end

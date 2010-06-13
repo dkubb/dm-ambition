@@ -200,10 +200,6 @@ module DataMapper
             end
 
           elsif rhs == @model
-            if @model.key.size > 1
-              raise 'Until OR conditions are added can only match resources with single keys'
-            end
-
             resources = case lhs
               when Array
                 case operator
@@ -217,10 +213,8 @@ module DataMapper
                 end
             end
 
-            property   = @model.key.first
-            bind_value = resources.map { |r| r.key.first }.sort
-
-            evaluate_operator(:include?, bind_value, property)
+            key = @model.key
+            @container << DataMapper::Query.target_conditions(resources, key, key)
 
           elsif lhs.kind_of?(DataMapper::Property)
             property   = lhs
