@@ -29,6 +29,10 @@ module DataMapper
           end
         end
 
+        def process_error(exp)
+          raise "ERROR: calling process_#{exp.shift} with #{exp.inspect} (in process_error)"
+        end
+
         def process_iter(exp)
           call_argslist = exp.shift
 
