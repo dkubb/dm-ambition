@@ -435,7 +435,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'receiver matching a resource' do
         before :all do
-          resource = @model.create(:id => 1)
+          resource = @model.new(:id => 1)
 
           @return = @subject.filter { |u| u == resource }
         end

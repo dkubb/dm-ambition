@@ -190,7 +190,7 @@ module DataMapper
             elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
               resource = rhs
 
-              if resource.repository == DataMapper.repository && resource.saved?
+              if resource.repository == DataMapper.repository && resource.key
                 @model.key.zip(resource.key) do |property, bind_value|
                   @container << DataMapper::Query::Conditions::Comparison.new(:eql, property, bind_value)
                 end
