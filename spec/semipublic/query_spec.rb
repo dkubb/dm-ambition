@@ -671,11 +671,33 @@ describe DataMapper::Ambition::Query do
         end
 
         it 'should set conditions' do
-          pending 'TODO: make methods work inside block' do
-            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
-              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], name)
-            )
-          end
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          )
+        end
+      end
+
+      describe 'method with arguments' do
+        def name(first_name, last_name)
+          "#{first_name} #{last_name}"
+        end
+
+        before :all do
+          @return = @subject.filter { |u| u.name == name('Dan', 'Kubb') }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+          )
         end
       end
 

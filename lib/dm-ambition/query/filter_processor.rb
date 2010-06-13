@@ -48,11 +48,13 @@ module DataMapper
           operator = exp.shift
           rhs      = process(exp.shift)
 
-          return nil if lhs.nil?
-
           operator = rhs.shift if operator == :send
 
-          evaluate_operator(operator, lhs, rhs.shift)
+          if lhs.nil?
+            eval("method(#{operator.inspect})", @binding).call(*rhs)
+          else
+            evaluate_operator(operator, lhs, rhs.shift)
+          end
         end
 
         def process_and(exp)
