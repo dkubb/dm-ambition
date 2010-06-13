@@ -428,7 +428,7 @@ describe DataMapper::Ambition::Query do
 
       describe 'receiver matching a resource' do
         before :all do
-          resource = User.create(:id => 1)
+          resource = @model.create(:id => 1)
 
           @return = @subject.filter { |u| u == resource }
         end
@@ -451,7 +451,7 @@ describe DataMapper::Ambition::Query do
       [ :include?, :member? ].each do |method|
         describe "receiver matching a resource using Array##{method}" do
           before :all do
-            resource = User.new(:id => 1)
+            resource = @model.new(:id => 1)
 
             @return = @subject.filter { |u| [ resource ].send(method, u) }
           end
@@ -475,8 +475,8 @@ describe DataMapper::Ambition::Query do
       [ :key?, :has_key?, :include?, :member? ].each do |method|
         describe "receiver matching a resource using Hash##{method}" do
           before :all do
-            one = User.new(:id => 1)
-            two = User.new(:id => 2)
+            one = @model.new(:id => 1)
+            two = @model.new(:id => 2)
 
             @return = @subject.filter { |u| { one => '1', two => '2' }.send(method, u) }
           end
@@ -500,8 +500,8 @@ describe DataMapper::Ambition::Query do
       [ :value?, :has_value? ].each do |method|
         describe "receiver matching a resource using Hash##{method}" do
           before :all do
-            one = User.new(:id => 1)
-            two = User.new(:id => 2)
+            one = @model.new(:id => 1)
+            two = @model.new(:id => 2)
 
             @return = @subject.filter { |u| { '1' => one, '2' => two }.send(method, u) }
           end
