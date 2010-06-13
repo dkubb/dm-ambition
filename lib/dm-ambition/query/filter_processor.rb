@@ -55,7 +55,7 @@ module DataMapper
           operator = rhs.shift if operator == :send
 
           if lhs.nil?
-            eval("method(#{operator.inspect})", @binding).call(*rhs)
+            evaluate_method(operator, *rhs)
           else
             evaluate_operator(operator, lhs, rhs.shift)
           end
@@ -296,6 +296,10 @@ module DataMapper
 
         def value(value)
           eval(value.to_s, @binding)
+        end
+
+        def evaluate_method(name, *args)
+          value("method(#{name.inspect})").call(*args)
         end
       end # class FilterProcessor
     end # module Query
