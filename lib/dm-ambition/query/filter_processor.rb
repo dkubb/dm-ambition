@@ -237,7 +237,6 @@ module DataMapper
             operator = remap_operator(operator)
 
             @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
-            @container
 
           elsif rhs.kind_of?(DataMapper::Property)
             property   = rhs
@@ -273,7 +272,6 @@ module DataMapper
             operator = remap_operator(operator)
 
             @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
-            @container
 
           elsif lhs.respond_to?(operator)
             lhs.send(operator, *[ rhs ].compact)
