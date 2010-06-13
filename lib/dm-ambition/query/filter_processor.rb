@@ -274,7 +274,7 @@ module DataMapper
             @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
 
           elsif lhs.respond_to?(operator)
-            lhs.send(operator, *[ rhs ].compact)
+            lhs.send(operator, *Array(rhs))
 
           end
         end
