@@ -451,9 +451,10 @@ describe DataMapper::Ambition::Query do
       [ :include?, :member? ].each do |method|
         describe "receiver matching a resource using Array##{method}" do
           before :all do
-            resource = @model.new(:id => 1)
+            one = @model.new(:id => 1)
+            two = @model.new(:id => 2)
 
-            @return = @subject.filter { |u| [ resource ].send(method, u) }
+            @return = @subject.filter { |u| [ one, two ].send(method, u) }
           end
 
           it 'should return a Query' do
@@ -466,7 +467,7 @@ describe DataMapper::Ambition::Query do
 
           it 'should set conditions' do
             @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
-              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1 ])
+              DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [ 1, 2 ])
             )
           end
         end
