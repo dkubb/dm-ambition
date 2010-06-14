@@ -34,7 +34,7 @@ module DataMapper
         end
 
         def process_iter(exp)
-          call_argslist = exp.shift
+          exp.shift
 
           # get the reciever
           @receiver = process(exp.shift)
