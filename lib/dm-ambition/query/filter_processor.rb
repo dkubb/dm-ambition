@@ -272,8 +272,6 @@ module DataMapper
           end
         end
 
-        # TODO: update dm-core internals to use the Ruby operators
-        # insted of the DM specific ones
         def remap_operator(operator)
           # remap Ruby to DM operators
           case operator
