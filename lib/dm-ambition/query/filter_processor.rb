@@ -189,6 +189,8 @@ module DataMapper
           value(exp.shift)
         end
 
+      private
+
         def evaluate_operator(operator, lhs, rhs)
           if lhs == @model
             if rhs.nil?
