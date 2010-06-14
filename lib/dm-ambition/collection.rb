@@ -9,13 +9,7 @@ module DataMapper
       # TODO: document this
       # @api public
       def select(&block)
-        query = self.query.filter(&block)
-        return new_collection(query, super) if loaded?
-
-        collection = all(query)
-        collection.unshift(*head.select(&block)) if head.any?
-        collection.concat(tail.select(&block))   if tail.any?
-        collection
+        filter_collection(:select, block) { super }
       end
 
       # TODO: document this
@@ -28,14 +22,22 @@ module DataMapper
       # TODO: document this
       # @api public
       def reject(&block)
-        query = self.query.filter(true, &block)
-        return new_collection(query, super) if loaded?
+        filter_collection(:reject, block, true) { super }
+      end
+
+    private
+
+      # @api private
+      def filter_collection(method, block, negate = false)
+        query = self.query.filter(negate, &block)
+        return new_collection(query, yield) if loaded?
 
         collection = all(query)
-        collection.unshift(*head.reject(&block)) if head.any?
-        collection.concat(tail.reject(&block))   if tail.any?
+        collection.unshift(*head.send(method, &block)) if head.any?
+        collection.concat(tail.send(method, &block))   if tail.any?
         collection
       end
+
     end # module Collection
   end # module Ambition
 end # module DataMapper
