@@ -184,7 +184,7 @@ module DataMapper
         def evaluate_property_source(operator, lhs, rhs)
           bind_value = rhs
 
-          operator = if operator == :nil? && bind_value.nil?
+          operator = if operator == :nil?
             :eql
           else
             remap_operator(operator)
