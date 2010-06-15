@@ -75,17 +75,11 @@ module DataMapper
         end
 
         def process_arglist(exp)
-          arglist = []
-          while sexp = exp.shift
-            arglist << process(sexp)
-          end
-          arglist
+          process_array(exp)
         end
 
         def process_colon2(exp)
-          const = process(exp.shift)
-
-          const.const_get(exp.shift)
+          process(exp.shift).const_get(exp.shift)
         end
 
         def process_const(exp)
@@ -93,28 +87,18 @@ module DataMapper
         end
 
         def process_match3(exp)
-          rhs = process(exp.shift)
-          lhs = process(exp.shift)
-
-          evaluate_operator(:=~, lhs, rhs)
+          evaluate_operator(:=~, process(exp.shift), process(exp.shift))
         end
 
         def process_array(exp)
           array = []
-          while sexp = exp.shift
-            array << process(sexp)
-          end
+          array << process(exp.shift) until exp.empty?
           array
         end
 
         def process_hash(exp)
           hash = {}
-          until exp.empty?
-            key   = process(exp.shift)
-            value = process(exp.shift)
-
-            hash[key] = value
-          end
+          hash[process(exp.shift)] = process(exp.shift) until exp.empty?
           hash
         end
 
@@ -152,11 +136,7 @@ module DataMapper
 
         def process_connective(exp, operation)
           parent, @container = @container, DataMapper::Query::Conditions::Operation.new(operation)
-
-          while sexp = exp.shift
-            process(sexp)
-          end
-
+          process(exp.shift) until exp.empty?
           parent << @container
         ensure
           @container = parent
