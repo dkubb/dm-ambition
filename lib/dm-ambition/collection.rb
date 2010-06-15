@@ -29,10 +29,10 @@ module DataMapper
 
       # @api private
       def filter_collection(operation, block)
-        query = self.query.filter(&block)
-        return new_collection(query, yield) if loaded?
+        new_query = query.filter(&block)
+        return new_collection(new_query, yield) if loaded?
 
-        collection = self.send(operation, all(query))
+        collection = send(operation, all(new_query))
         collection.unshift(*head.send(operation, head.select(&block))) if head.any?
         collection.concat(tail.send(operation, tail.select(&block)))   if tail.any?
         collection
