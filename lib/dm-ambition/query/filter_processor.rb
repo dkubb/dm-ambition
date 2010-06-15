@@ -156,6 +156,8 @@ module DataMapper
           elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
             key = @model.key
             @container << DataMapper::Query.target_conditions(rhs, key, key)
+          else
+            raise 'TODO: spec this branch'
           end
         end
 
@@ -171,6 +173,9 @@ module DataMapper
                 when :key?, :has_key?, :include?, :member? then lhs.keys
                 when :value?, :has_value?                  then lhs.values
               end
+
+            else
+              raise 'TODO: spec this branch'
           end
 
           key = @model.key
