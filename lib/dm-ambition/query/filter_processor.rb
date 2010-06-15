@@ -58,52 +58,37 @@ module DataMapper
         end
 
         def process_and(exp)
-          parent = @container
+          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:and)
 
-          begin
-            unless @container.kind_of?(DataMapper::Query::Conditions::AndOperation)
-              parent << @container = DataMapper::Query::Conditions::Operation.new(:and)
-            end
-
-            while sexp = exp.shift
-              process(sexp)
-            end
-          ensure
-            @container = parent
+          while sexp = exp.shift
+            process(sexp)
           end
 
-          @container
+          parent << @container
+        ensure
+          @container = parent
         end
 
         def process_or(exp)
-          parent = @container
+          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:or)
 
-          begin
-            unless @container.kind_of?(DataMapper::Query::Conditions::OrOperation)
-              parent << @container = DataMapper::Query::Conditions::Operation.new(:or)
-            end
-
-            while sexp = exp.shift
-              process(sexp)
-            end
-          ensure
-            @container = parent
+          while sexp = exp.shift
+            process(sexp)
           end
 
-          @container
+          parent << @container
+        ensure
+          @container = parent
         end
 
         def process_not(exp)
-          parent = @container
+          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:not)
 
-          begin
-            parent << @container = DataMapper::Query::Conditions::Operation.new(:not)
-            process(exp.shift)
-          ensure
-            @container = parent
-          end
+          process(exp.shift)
 
-          @container
+          parent << @container
+        ensure
+          @container = parent
         end
 
         def process_lvar(exp)
