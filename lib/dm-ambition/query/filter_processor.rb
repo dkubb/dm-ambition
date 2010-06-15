@@ -39,10 +39,6 @@ module DataMapper
           process(exp.shift)
         end
 
-        def process_lasgn(exp)
-          exp.shift
-        end
-
         def process_call(exp)
           lhs      = process(exp.shift)
           operator = exp.shift
@@ -78,6 +74,10 @@ module DataMapper
           process_array(exp)
         end
 
+        def process_match3(exp)
+          evaluate_operator(:=~, process(exp.shift), process(exp.shift))
+        end
+
         def process_colon2(exp)
           process(exp.shift).const_get(exp.shift)
         end
@@ -86,20 +86,8 @@ module DataMapper
           Object.const_get(exp.shift)
         end
 
-        def process_match3(exp)
-          evaluate_operator(:=~, process(exp.shift), process(exp.shift))
-        end
-
-        def process_array(exp)
-          array = []
-          array << process(exp.shift) until exp.empty?
-          array
-        end
-
-        def process_hash(exp)
-          hash = {}
-          hash[process(exp.shift)] = process(exp.shift) until exp.empty?
-          hash
+        def process_lasgn(exp)
+          exp.shift
         end
 
         def process_str(exp)
@@ -107,9 +95,15 @@ module DataMapper
         end
 
         def process_lit(exp)
-          literal = exp.shift
-          exp.shift  # FIXME: workaround for bug in ParseTree or SexpProcessor
-          literal
+          exp.shift
+        end
+
+        def process_ivar(exp)
+          value(exp.shift)
+        end
+
+        def process_gvar(exp)
+          value(exp.shift)
         end
 
         def process_true(exp)
@@ -124,12 +118,16 @@ module DataMapper
           nil
         end
 
-        def process_ivar(exp)
-          value(exp.shift)
+        def process_array(exp)
+          array = []
+          array << process(exp.shift) until exp.empty?
+          array
         end
 
-        def process_gvar(exp)
-          value(exp.shift)
+        def process_hash(exp)
+          hash = {}
+          hash[process(exp.shift)] = process(exp.shift) until exp.empty?
+          hash
         end
 
       private
