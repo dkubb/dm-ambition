@@ -775,5 +775,13 @@ describe DataMapper::Ambition::Query do
         end
       end
     end
+
+    context 'with an invalid block' do
+      specify 'should raise an error' do
+        expect {
+          @subject.filter { |u| puts "Hello World"; u.id == 1 }
+        }.to raise_error
+      end
+    end
   end
 end
