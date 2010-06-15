@@ -189,12 +189,11 @@ module DataMapper
           # TODO: throw an exception if the operator is :== and the value is an Array
           #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
 
-          if operator == :nil? && bind_value.nil?
-            operator   = :==
-            bind_value = nil
+          operator = if operator == :nil? && bind_value.nil?
+            :eql
+          else
+            remap_operator(operator)
           end
-
-          operator = remap_operator(operator)
 
           @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
         end
@@ -206,31 +205,33 @@ module DataMapper
           # TODO: throw an exception if the operator is :== and the bind value is an Array
           #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
 
-          case bind_value
+          operator = case bind_value
             when Array
               case operator
                 when :include?, :member?
-                  operator = :in
+                  :in
               end
 
             when Range
               case operator
                 when :include?, :member?, :===
-                  operator = :in
+                  :in
               end
 
             when Hash
               case operator
                 when :key?, :has_key?, :include?, :member?
-                  operator   = :in
                   bind_value = bind_value.keys
+                  :in
                 when :value?, :has_value?
-                  operator   = :in
                   bind_value = bind_value.values
+                  :in
               end
-          end
 
-          operator = remap_operator(operator)
+            else
+              remap_operator(operator)
+
+          end
 
           @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
         end
