@@ -67,7 +67,7 @@ module DataMapper
 
         def process_lvar(exp)
           var = exp.shift
-          var == @receiver ? @model : value(var)
+          var == @receiver ? @model : eval(var)
         end
 
         def process_arglist(exp)
@@ -99,11 +99,11 @@ module DataMapper
         end
 
         def process_ivar(exp)
-          value(exp.shift)
+          eval(exp.shift)
         end
 
         def process_gvar(exp)
-          value(exp.shift)
+          eval(exp.shift)
         end
 
         def process_true(exp)
@@ -236,12 +236,12 @@ module DataMapper
           end
         end
 
-        def value(value)
-          eval(value.to_s, @binding)
+        def eval(value, binding = @binding)
+          super(value.to_s, binding)
         end
 
         def call_method(name, *args)
-          value("method(#{name.inspect})").call(*args)
+          eval("method(#{name.inspect})").call(*args)
         end
       end # class FilterProcessor
     end # module Query
