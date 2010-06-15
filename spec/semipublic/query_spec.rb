@@ -820,11 +820,23 @@ describe DataMapper::Ambition::Query do
       end
     end
 
-    context 'with an invalid block' do
-      specify 'should raise an error' do
-        expect {
-          @subject.filter { |u| puts "Hello World"; u.id == 1 }
-        }.to raise_error
+    context 'with a block containing skipped code' do
+      before :all do
+        @return = @subject.filter { |u| puts "Hello World"; u.name == 'Dan Kubb' }
+      end
+
+      it 'should return a Query' do
+        @return.should be_kind_of(DataMapper::Query)
+      end
+
+      it 'should not return self' do
+        @return.should_not equal(@subject)
+      end
+
+      it 'should set conditions' do
+        @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+          DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+        )
       end
     end
   end

@@ -71,6 +71,10 @@ module DataMapper
           process_array(exp)
         end
 
+        def process_block(exp)
+          process_array(exp).last
+        end
+
         def process_match3(exp)
           evaluate_operator(:=~, process(exp.shift), process(exp.shift))
         end
