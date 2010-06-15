@@ -162,15 +162,15 @@ module DataMapper
 
         def evaluate_receiver_target(operator, lhs, rhs)
           resources = case lhs
-            when Array
-              case operator
-                when :include?, :member? then lhs
-              end
-
             when Hash
               case operator
                 when :key?, :has_key?, :include?, :member? then lhs.keys
                 when :value?, :has_value?                  then lhs.values
+              end
+
+            when Enumerable
+              case operator
+                when :include?, :member? then lhs
               end
 
             else
@@ -203,9 +203,13 @@ module DataMapper
           #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
 
           operator = case bind_value
-            when Array
+            when Hash
               case operator
-                when :include?, :member?
+                when :key?, :has_key?, :include?, :member?
+                  bind_value = bind_value.keys
+                  :in
+                when :value?, :has_value?
+                  bind_value = bind_value.values
                   :in
               end
 
@@ -215,13 +219,9 @@ module DataMapper
                   :in
               end
 
-            when Hash
+            when Enumerable
               case operator
-                when :key?, :has_key?, :include?, :member?
-                  bind_value = bind_value.keys
-                  :in
-                when :value?, :has_value?
-                  bind_value = bind_value.values
+                when :include?, :member?
                   :in
               end
 
