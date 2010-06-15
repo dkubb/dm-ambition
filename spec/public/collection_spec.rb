@@ -37,7 +37,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
       unless loaded
         [ :select, :find_all ].each do |method|
           describe "##{method}", '(unloaded)' do
-            describe 'when matching resource prepended' do
+            context 'when matching resource prepended' do
               before :all do
                 @subject.unshift(@other)
                 @return = @subject.send(method) { |u| u.admin == true }
@@ -64,7 +64,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
               end
             end
 
-            describe 'when matching resource appended' do
+            context 'when matching resource appended' do
               before :all do
                 @subject << @other
                 @return = @subject.send(method) { |u| u.admin == true }
@@ -94,7 +94,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
         end
 
         describe '#reject', '(unloaded)' do
-          describe 'when matching resource prepended' do
+          context 'when matching resource prepended' do
             before :all do
               @subject.unshift(@other)
               @return = @subject.reject { |u| u.admin != true }
@@ -121,7 +121,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
           end
 
-          describe 'when matching resource appended' do
+          context 'when matching resource appended' do
             before :all do
               @subject << @other
               @return = @subject.reject { |u| u.admin != true }

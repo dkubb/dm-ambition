@@ -34,8 +34,8 @@ describe DataMapper::Ambition::Query do
   it { @subject.should respond_to(:filter) }
 
   describe '#filter' do
-    describe 'with operator' do
-      describe '==' do
+    context 'with operator' do
+      context '==' do
         before :all do
           @return = @subject.filter { |u| u.name == 'Dan Kubb' }
         end
@@ -55,7 +55,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe '=~' do
+      context '=~' do
         before :all do
           @return = @subject.filter { |u| u.name =~ /Dan Kubb/ }
         end
@@ -75,7 +75,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe '>' do
+      context '>' do
         before :all do
           @return = @subject.filter { |u| u.id > 1 }
         end
@@ -95,7 +95,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe '>=' do
+      context '>=' do
         before :all do
           @return = @subject.filter { |u| u.id >= 1 }
         end
@@ -115,7 +115,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe '<' do
+      context '<' do
         before :all do
           @return = @subject.filter { |u| u.id < 1 }
         end
@@ -135,7 +135,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe '<=' do
+      context '<=' do
         before :all do
           @return = @subject.filter { |u| u.id <= 1 }
         end
@@ -156,7 +156,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :include?, :member? ].each do |method|
-        describe "Array##{method}" do
+        context "Array##{method}" do
           before :all do
             @return = @subject.filter { |u| [ 1, 2 ].send(method, u.id) }
           end
@@ -178,7 +178,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :include?, :member?, :=== ].each do |method|
-        describe "Range##{method} (inclusive)" do
+        context "Range##{method} (inclusive)" do
           before :all do
             @return = @subject.filter { |u| (1..2).send(method, u.id) }
           end
@@ -198,7 +198,7 @@ describe DataMapper::Ambition::Query do
           end
         end
 
-        describe "Range##{method} (exclusive)" do
+        context "Range##{method} (exclusive)" do
           before :all do
             @return = @subject.filter { |u| (1...3).send(method, u.id) }
           end
@@ -220,7 +220,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :key?, :has_key?, :include?, :member? ].each do |method|
-        describe "Hash##{method}" do
+        context "Hash##{method}" do
           before :all do
             @return = @subject.filter { |u| { 1 => '1', 2 => '2' }.send(method, u.id) }
           end
@@ -242,7 +242,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :value?, :has_value? ].each do |method|
-        describe "Hash##{method}" do
+        context "Hash##{method}" do
           before :all do
             @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
           end
@@ -263,7 +263,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'receiver.method.nil?' do
+      context 'receiver.method.nil?' do
         before :all do
           @return = @subject.filter { |u| u.id.nil? }
         end
@@ -284,8 +284,8 @@ describe DataMapper::Ambition::Query do
       end
     end
 
-    describe 'with bind value' do
-      describe 'nil' do
+    context 'with bind value' do
+      context 'nil' do
         before :all do
           @return = @subject.filter { |u| u.name == nil }
         end
@@ -305,7 +305,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'true' do
+      context 'true' do
         before :all do
           @return = @subject.filter { |u| u.admin == true }
         end
@@ -325,7 +325,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'false' do
+      context 'false' do
         before :all do
           @return = @subject.filter { |u| u.admin == false }
         end
@@ -346,8 +346,8 @@ describe DataMapper::Ambition::Query do
       end
     end
 
-    describe 'with conditions' do
-      describe 'ANDed' do
+    context 'with conditions' do
+      context 'ANDed' do
         before :all do
           @return = @subject.filter { |u| u.id == 1 && u.name == 'Dan Kubb' }
         end
@@ -368,7 +368,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'ORed' do
+      context 'ORed' do
         before :all do
           @return = @subject.filter { |u| u.id == 1 || u.name == 'Dan Kubb' }
         end
@@ -391,7 +391,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'negated' do
+      context 'negated' do
         before :all do
           @return = @subject.filter { |u| !(u.id == 1) }
         end
@@ -413,7 +413,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'double-negated' do
+      context 'double-negated' do
         before :all do
           @return = @subject.filter { |u| !(!(u.id == 1)) }
         end
@@ -433,7 +433,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'receiver matching a resource' do
+      context 'receiver matching a resource' do
         before :all do
           resource = @model.new(:id => 1)
 
@@ -456,7 +456,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :include?, :member? ].each do |method|
-        describe "receiver matching a resource using Array##{method}" do
+        context "receiver matching a resource using Array##{method}" do
           before :all do
             one = @model.new(:id => 1)
             two = @model.new(:id => 2)
@@ -479,7 +479,7 @@ describe DataMapper::Ambition::Query do
           end
         end
 
-        describe "receiver matching a resource (with a CPK) using Array##{method}" do
+        context "receiver matching a resource (with a CPK) using Array##{method}" do
           before :all do
             @model   = Person
             @subject = DataMapper::Query.new(@repository, @model)
@@ -516,7 +516,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :key?, :has_key?, :include?, :member? ].each do |method|
-        describe "receiver matching a resource using Hash##{method}" do
+        context "receiver matching a resource using Hash##{method}" do
           before :all do
             one = @model.new(:id => 1)
             two = @model.new(:id => 2)
@@ -541,7 +541,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ :value?, :has_value? ].each do |method|
-        describe "receiver matching a resource using Hash##{method}" do
+        context "receiver matching a resource using Hash##{method}" do
           before :all do
             one = @model.new(:id => 1)
             two = @model.new(:id => 2)
@@ -565,7 +565,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'using send on receiver' do
+      context 'using send on receiver' do
         before :all do
           @return = @subject.filter { |u| u.send(:name) == 'Dan Kubb' }
         end
@@ -586,8 +586,8 @@ describe DataMapper::Ambition::Query do
       end
     end
 
-    describe 'with external value' do
-      describe 'local variable' do
+    context 'with external value' do
+      context 'local variable' do
         before :all do
           name = 'Dan Kubb'
 
@@ -609,7 +609,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'instance variable' do
+      context 'instance variable' do
         before :all do
           @name = 'Dan Kubb'
 
@@ -631,7 +631,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'global variable' do
+      context 'global variable' do
         before :all do
           $name = 'Dan Kubb'
 
@@ -653,7 +653,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'method' do
+      context 'method' do
         def name
           'Dan Kubb'
         end
@@ -677,7 +677,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'method with arguments' do
+      context 'method with arguments' do
         def name(first_name, last_name)
           "#{first_name} #{last_name}"
         end
@@ -701,7 +701,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'constant' do
+      context 'constant' do
         NAME = 'Dan Kubb'
 
         before :all do
@@ -723,7 +723,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'namespaced constant' do
+      context 'namespaced constant' do
         before :all do
           Object.send(:remove_const, :Condition) if defined?(::Condition)
           module ::Condition
@@ -748,7 +748,7 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      describe 'namespaced method' do
+      context 'namespaced method' do
         before :all do
           Object.send(:remove_const, :Condition) if defined?(::Condition)
           module ::Condition

@@ -3,7 +3,7 @@ share_examples_for 'it has public filter methods' do
     it { @subject.should respond_to(method) }
 
     describe "##{method}", ('(loaded)' if loaded) do
-      describe 'with simple conditions' do
+      context 'with simple conditions' do
         before :all do
           @return = @subject.send(method) { |u| u.name == 'Dan Kubb' }
         end
@@ -31,7 +31,7 @@ share_examples_for 'it has public filter methods' do
         end
       end
 
-      describe 'with OR + AND conditions' do
+      context 'with OR + AND conditions' do
         before :all do
           @return = @subject.send(method) { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
         end
@@ -59,7 +59,7 @@ share_examples_for 'it has public filter methods' do
         end
       end
 
-      describe 'with AND + OR conditions' do
+      context 'with AND + OR conditions' do
         before :all do
           @return = @subject.send(method) { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
         end
@@ -93,7 +93,7 @@ share_examples_for 'it has public filter methods' do
     it { @subject.should respond_to(method) }
 
     describe "##{method}", ('(loaded)' if loaded) do
-      describe 'with simple conditions' do
+      context 'with simple conditions' do
         before :all do
           @return = @subject.send(method) { |u| u.name == 'Dan Kubb' }
         end
@@ -117,7 +117,7 @@ share_examples_for 'it has public filter methods' do
         end
       end
 
-      describe 'with OR + AND conditions' do
+      context 'with OR + AND conditions' do
         before :all do
           @return = @subject.send(method) { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
         end
@@ -141,7 +141,7 @@ share_examples_for 'it has public filter methods' do
         end
       end
 
-      describe 'with AND + OR conditions' do
+      context 'with AND + OR conditions' do
         before :all do
           @return = @subject.send(method) { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
         end
@@ -170,7 +170,7 @@ share_examples_for 'it has public filter methods' do
   it { @subject.should respond_to(:reject) }
 
   describe '#reject', ('(loaded)' if loaded) do
-    describe 'with simple conditions' do
+    context 'with simple conditions' do
       before :all do
         @return = @subject.reject { |u| u.name != 'Dan Kubb' }
       end
@@ -198,7 +198,7 @@ share_examples_for 'it has public filter methods' do
       end
     end
 
-    describe 'with OR + AND conditions' do
+    context 'with OR + AND conditions' do
       before :all do
         @return = @subject.reject { |u| (u.name == 'Dan Kubb' || u.name == 'Sam Smoot') && u.admin == true }
       end
@@ -226,7 +226,7 @@ share_examples_for 'it has public filter methods' do
       end
     end
 
-    describe 'with AND + OR conditions' do
+    context 'with AND + OR conditions' do
       before :all do
         @return = @subject.reject { |u| (u.admin == true && u.name == 'Dan Kubb') || u.name == 'Sam Smoot' }
       end
