@@ -565,23 +565,25 @@ describe DataMapper::Ambition::Query do
         end
       end
 
-      context 'using send on receiver' do
-        before :all do
-          @return = @subject.filter { |u| u.send(:name) == 'Dan Kubb' }
-        end
+      [ :send, :__send__ ].each do |method|
+        context 'using send on receiver' do
+          before :all do
+            @return = @subject.filter { |u| u.send(method, :name) == 'Dan Kubb' }
+          end
 
-        it 'should return a Query' do
-          @return.should be_kind_of(DataMapper::Query)
-        end
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
 
-        it 'should not return self' do
-          @return.should_not equal(@subject)
-        end
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
 
-        it 'should set conditions' do
-          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
-            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
-          )
+          it 'should set conditions' do
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+              DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:name], 'Dan Kubb')
+            )
+          end
         end
       end
     end

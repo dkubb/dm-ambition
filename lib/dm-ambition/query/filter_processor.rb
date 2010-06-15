@@ -39,7 +39,9 @@ module DataMapper
           operator = exp.shift
           rhs      = process(exp.shift)
 
-          operator = rhs.shift if operator == :send
+          while [ :send, :__send__ ].include?(operator)
+            operator = rhs.shift
+          end
 
           if lhs.nil?
             call_method(operator, *rhs)
