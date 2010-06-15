@@ -18,9 +18,8 @@ module DataMapper
           self.auto_shift_type = true
           self.default_method  = :process_error
 
-          @binding    = binding
-          @model      = model
-          @receiver   = nil
+          @binding = binding
+          @model   = model
 
           @conditions = @container = DataMapper::Query::Conditions::Operation.new(:and)
         end
@@ -67,7 +66,7 @@ module DataMapper
 
         def process_lvar(exp)
           var = exp.shift
-          var == @receiver ? @model : eval(var)
+          var.equal?(@receiver) ? @receiver : eval(var)
         end
 
         def process_arglist(exp)
@@ -141,8 +140,8 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
-          if    lhs == @model                      then evaluate_model_source(operator, lhs, rhs)
-          elsif rhs == @model                      then evaluate_model_target(operator, lhs, rhs)
+          if    lhs.equal?(@receiver)              then evaluate_receiver_source(operator, lhs, rhs)
+          elsif rhs.equal?(@receiver)              then evaluate_receiver_target(operator, lhs, rhs)
           elsif lhs.kind_of?(DataMapper::Property) then evaluate_property_source(operator, lhs, rhs)
           elsif rhs.kind_of?(DataMapper::Property) then evaluate_property_target(operator, lhs, rhs)
           else
@@ -150,7 +149,7 @@ module DataMapper
           end
         end
 
-        def evaluate_model_source(operator, lhs, rhs)
+        def evaluate_receiver_source(operator, lhs, rhs)
           if rhs.nil?
             @model.properties[operator]
           elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
@@ -161,7 +160,7 @@ module DataMapper
           end
         end
 
-        def evaluate_model_target(operator, lhs, rhs)
+        def evaluate_receiver_target(operator, lhs, rhs)
           resources = case lhs
             when Array
               case operator
