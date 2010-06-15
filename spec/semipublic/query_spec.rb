@@ -778,6 +778,48 @@ describe DataMapper::Ambition::Query do
       end
     end
 
+    context 'with literal' do
+      context 'true' do
+        before :all do
+          @return = @subject.filter { |u| true }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          pending do
+            @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:null)
+          end
+        end
+      end
+
+      [ nil, false ].each do |literal|
+        context 'false' do
+          before :all do
+            @return = @subject.filter { |u| literal }
+          end
+
+          it 'should return a Query' do
+            @return.should be_kind_of(DataMapper::Query)
+          end
+
+          it 'should not return self' do
+            @return.should_not equal(@subject)
+          end
+
+          it 'should set conditions' do
+            pending 'TODO: figure out a way to represent that nothing matches'
+          end
+        end
+      end
+    end
+
     context 'with an invalid block' do
       specify 'should raise an error' do
         expect {
