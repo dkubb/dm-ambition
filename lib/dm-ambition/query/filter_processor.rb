@@ -163,12 +163,10 @@ module DataMapper
                 when :key?, :has_key?, :include?, :member? then lhs.keys
                 when :value?, :has_value?                  then lhs.values
               end
-
             when Enumerable
               case operator
                 when :include?, :member? then lhs
               end
-
             else
               raise 'TODO: spec this branch'
           end
@@ -202,22 +200,18 @@ module DataMapper
                   bind_value = bind_value.values
                   :in
               end
-
             when Range
               case operator
                 when :include?, :member?, :===
                   :in
               end
-
             when Enumerable
               case operator
                 when :include?, :member?
                   :in
               end
-
             else
               remap_operator(operator)
-
           end
 
           @container << DataMapper::Query::Conditions::Comparison.new(operator, rhs, bind_value)
