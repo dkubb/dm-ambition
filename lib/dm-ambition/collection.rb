@@ -2,14 +2,8 @@ module DataMapper
   module Ambition
     module Collection
       def self.included(base)
-        base.send(:alias_method, :find_all, :select)
         base.send(:alias_method, :find,     :detect)
-      end
-
-      # TODO: document this
-      # @api public
-      def select(&block)
-        filter_collection(:select, block) { super }
+        base.send(:alias_method, :find_all, :select)
       end
 
       # TODO: document this
@@ -17,6 +11,12 @@ module DataMapper
       def detect(&block)
         return super if loaded?
         head.detect(&block) || first(query.filter(&block))
+      end
+
+      # TODO: document this
+      # @api public
+      def select(&block)
+        filter_collection(:select, block) { super }
       end
 
       # TODO: document this
