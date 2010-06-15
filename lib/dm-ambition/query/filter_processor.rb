@@ -184,9 +184,6 @@ module DataMapper
         def evaluate_property_source(operator, lhs, rhs)
           bind_value = rhs
 
-          # TODO: throw an exception if the operator is :== and the value is an Array
-          #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
-
           operator = if operator == :nil? && bind_value.nil?
             :eql
           else
@@ -198,9 +195,6 @@ module DataMapper
 
         def evaluate_property_target(operator, lhs, rhs)
           bind_value = lhs
-
-          # TODO: throw an exception if the operator is :== and the bind value is an Array
-          #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
 
           operator = case bind_value
             when Hash
