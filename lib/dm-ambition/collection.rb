@@ -16,25 +16,25 @@ module DataMapper
       # TODO: document this
       # @api public
       def select(&block)
-        filter_collection(:select, block) { super }
+        filter_collection(:&, block) { super }
       end
 
       # TODO: document this
       # @api public
       def reject(&block)
-        filter_collection(:reject, block, true) { super }
+        filter_collection(:-, block) { super }
       end
 
     private
 
       # @api private
-      def filter_collection(method, block, negate = false)
-        query = self.query.filter(negate, &block)
+      def filter_collection(operation, block)
+        query = self.query.filter(&block)
         return new_collection(query, yield) if loaded?
 
-        collection = all(query)
-        collection.unshift(*head.send(method, &block)) if head.any?
-        collection.concat(tail.send(method, &block))   if tail.any?
+        collection = self.send(operation, all(query))
+        collection.unshift(*head.send(operation, head.select(&block))) if head.any?
+        collection.concat(tail.send(operation, tail.select(&block)))   if tail.any?
         collection
       end
 

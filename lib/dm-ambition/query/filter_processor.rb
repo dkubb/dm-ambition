@@ -11,7 +11,7 @@ module DataMapper
       class FilterProcessor < SexpProcessor
         attr_reader :conditions
 
-        def initialize(binding, model, negated = false)
+        def initialize(binding, model)
           super()
 
           self.expected        = Object # allow anything for now
@@ -23,10 +23,6 @@ module DataMapper
           @receiver   = nil
 
           @conditions = @container = DataMapper::Query::Conditions::Operation.new(:and)
-
-          if negated
-            @conditions = DataMapper::Query::Conditions::Operation.new(:not, @container)
-          end
         end
 
         def process_error(exp)
