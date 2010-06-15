@@ -58,37 +58,15 @@ module DataMapper
         end
 
         def process_and(exp)
-          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:and)
-
-          while sexp = exp.shift
-            process(sexp)
-          end
-
-          parent << @container
-        ensure
-          @container = parent
+          process_connective(exp, :and)
         end
 
         def process_or(exp)
-          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:or)
-
-          while sexp = exp.shift
-            process(sexp)
-          end
-
-          parent << @container
-        ensure
-          @container = parent
+          process_connective(exp, :or)
         end
 
         def process_not(exp)
-          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(:not)
-
-          process(exp.shift)
-
-          parent << @container
-        ensure
-          @container = parent
+          process_connective(exp, :not)
         end
 
         def process_lvar(exp)
@@ -171,6 +149,18 @@ module DataMapper
         end
 
       private
+
+        def process_connective(exp, operation)
+          parent, @container = @container, DataMapper::Query::Conditions::Operation.new(operation)
+
+          while sexp = exp.shift
+            process(sexp)
+          end
+
+          parent << @container
+        ensure
+          @container = parent
+        end
 
         def evaluate_operator(operator, lhs, rhs)
           if lhs == @model
