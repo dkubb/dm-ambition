@@ -65,8 +65,8 @@ module DataMapper
         end
 
         def process_lvar(exp)
-          var = exp.shift
-          var.equal?(@receiver) ? @receiver : eval(var)
+          lvar = exp.shift
+          lvar.equal?(@receiver) ? @receiver : eval(lvar)
         end
 
         def process_arglist(exp)
