@@ -182,7 +182,6 @@ module DataMapper
         end
 
         def evaluate_property_source(operator, lhs, rhs)
-          property   = lhs
           bind_value = rhs
 
           # TODO: throw an exception if the operator is :== and the value is an Array
@@ -194,11 +193,10 @@ module DataMapper
             remap_operator(operator)
           end
 
-          @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
+          @container << DataMapper::Query::Conditions::Comparison.new(operator, lhs, bind_value)
         end
 
         def evaluate_property_target(operator, lhs, rhs)
-          property   = rhs
           bind_value = lhs
 
           # TODO: throw an exception if the operator is :== and the bind value is an Array
@@ -232,7 +230,7 @@ module DataMapper
 
           end
 
-          @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
+          @container << DataMapper::Query::Conditions::Comparison.new(operator, rhs, bind_value)
         end
 
         def remap_operator(operator)
