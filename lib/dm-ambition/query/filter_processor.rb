@@ -30,11 +30,7 @@ module DataMapper
 
         def process_iter(exp)
           exp.shift
-
-          # get the reciever
           @receiver = process(exp.shift)
-
-          # process the Proc body
           process(exp.shift)
         end
 
