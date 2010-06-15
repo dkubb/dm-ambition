@@ -800,7 +800,7 @@ describe DataMapper::Ambition::Query do
       end
 
       [ nil, false ].each do |literal|
-        context 'false' do
+        context literal.inspect do
           before :all do
             @return = @subject.filter { |u| literal }
           end
