@@ -141,86 +141,93 @@ module DataMapper
         end
 
         def evaluate_operator(operator, lhs, rhs)
-          if lhs == @model
-            if rhs.nil?
-              @model.properties[operator]
-            elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
-              key = @model.key
-              @container << DataMapper::Query.target_conditions(rhs, key, key)
-            end
-
-          elsif rhs == @model
-            resources = case lhs
-              when Array
-                case operator
-                  when :include?, :member? then lhs
-                end
-
-              when Hash
-                case operator
-                  when :key?, :has_key?, :include?, :member? then lhs.keys
-                  when :value?, :has_value?                  then lhs.values
-                end
-            end
-
-            key = @model.key
-            @container << DataMapper::Query.target_conditions(resources, key, key)
-
-          elsif lhs.kind_of?(DataMapper::Property)
-            property   = lhs
-            bind_value = rhs
-
-            # TODO: throw an exception if the operator is :== and the value is an Array
-            #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
-
-            if operator == :nil? && bind_value.nil?
-              operator   = :==
-              bind_value = nil
-            end
-
-            operator = remap_operator(operator)
-
-            @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
-
-          elsif rhs.kind_of?(DataMapper::Property)
-            property   = rhs
-            bind_value = lhs
-
-            # TODO: throw an exception if the operator is :== and the bind value is an Array
-            #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
-
-            case bind_value
-              when Array
-                case operator
-                  when :include?, :member?
-                    operator = :in
-                end
-
-              when Range
-                case operator
-                  when :include?, :member?, :===
-                    operator = :in
-                end
-
-              when Hash
-                case operator
-                  when :key?, :has_key?, :include?, :member?
-                    operator   = :in
-                    bind_value = bind_value.keys
-                  when :value?, :has_value?
-                    operator   = :in
-                    bind_value = bind_value.values
-                end
-            end
-
-            operator = remap_operator(operator)
-
-            @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
-
-          elsif lhs.respond_to?(operator)
+          if    lhs == @model                      then evaluate_model_source(operator, lhs, rhs)
+          elsif rhs == @model                      then evaluate_model_target(operator, lhs, rhs)
+          elsif lhs.kind_of?(DataMapper::Property) then evaluate_property_source(operator, lhs, rhs)
+          elsif rhs.kind_of?(DataMapper::Property) then evaluate_property_target(operator, lhs, rhs)
+          else
             lhs.send(operator, *Array(rhs))
-
           end
+        end
+
+        def evaluate_model_source(operator, lhs, rhs)
+          if rhs.nil?
+            @model.properties[operator]
+          elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
+            key = @model.key
+            @container << DataMapper::Query.target_conditions(rhs, key, key)
+          end
+        end
+
+        def evaluate_model_target(operator, lhs, rhs)
+          resources = case lhs
+            when Array
+              case operator
+                when :include?, :member? then lhs
+              end
+
+            when Hash
+              case operator
+                when :key?, :has_key?, :include?, :member? then lhs.keys
+                when :value?, :has_value?                  then lhs.values
+              end
+          end
+
+          key = @model.key
+          @container << DataMapper::Query.target_conditions(resources, key, key)
+        end
+
+        def evaluate_property_source(operator, lhs, rhs)
+          property   = lhs
+          bind_value = rhs
+
+          # TODO: throw an exception if the operator is :== and the value is an Array
+          #   - this prevents conditions like { |u| u.val == [ 1, 2, 3 ] }
+
+          if operator == :nil? && bind_value.nil?
+            operator   = :==
+            bind_value = nil
+          end
+
+          operator = remap_operator(operator)
+
+          @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
+        end
+
+        def evaluate_property_target(operator, lhs, rhs)
+          property   = rhs
+          bind_value = lhs
+
+          # TODO: throw an exception if the operator is :== and the bind value is an Array
+          #   - this prevents conditions like { |u| [ 1, 2, 3 ] == u.val }
+
+          case bind_value
+            when Array
+              case operator
+                when :include?, :member?
+                  operator = :in
+              end
+
+            when Range
+              case operator
+                when :include?, :member?, :===
+                  operator = :in
+              end
+
+            when Hash
+              case operator
+                when :key?, :has_key?, :include?, :member?
+                  operator   = :in
+                  bind_value = bind_value.keys
+                when :value?, :has_value?
+                  operator   = :in
+                  bind_value = bind_value.values
+              end
+          end
+
+          operator = remap_operator(operator)
+
+          @container << DataMapper::Query::Conditions::Comparison.new(operator, property, bind_value)
         end
 
         def remap_operator(operator)
