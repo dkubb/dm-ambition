@@ -859,6 +859,5 @@ describe DataMapper::Ambition::Query do
         )
       end
     end
-
   end
 end
