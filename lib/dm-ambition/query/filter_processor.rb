@@ -87,8 +87,12 @@ module DataMapper
           Object.const_get(exp.shift)
         end
 
+        def process_masgn(exp)
+          eval("#{process(exp.shift).join(', ')} = #{process(exp.shift).inspect}")
+        end
+
         def process_lasgn(exp)
-          exp.shift
+          assign_value(exp)
         end
 
         def process_str(exp)
@@ -242,6 +246,12 @@ module DataMapper
 
         def call_method(name, *args)
           eval("method(#{name.inspect})").call(*args)
+        end
+
+        def assign_value(exp)
+          var = exp.shift
+          return var if exp.empty?
+          eval("#{var} = #{process(exp.shift).inspect}")
         end
       end # class FilterProcessor
     end # module Query

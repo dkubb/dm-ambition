@@ -820,9 +820,9 @@ describe DataMapper::Ambition::Query do
       end
     end
 
-    context 'with a block containing skipped code' do
-      before :all do
-        @return = @subject.filter { |u| puts "Hello World"; u.name == 'Dan Kubb' }
+    context 'with single local variable assignment' do
+      before do
+        @return = @subject.filter { |u| name = 'Dan Kubb'; u.name == name }
       end
 
       it 'should return a Query' do
@@ -839,5 +839,26 @@ describe DataMapper::Ambition::Query do
         )
       end
     end
+
+    context 'with multiple local variable assignment' do
+      before do
+        @return = @subject.filter { |u| name1, name2 = 'Dan Kubb', 'John Doe'; [ name1, name2 ].include?(u.name) }
+      end
+
+      it 'should return a Query' do
+        @return.should be_kind_of(DataMapper::Query)
+      end
+
+      it 'should not return self' do
+        @return.should_not equal(@subject)
+      end
+
+      it 'should set conditions' do
+        @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+          DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:name], [ 'Dan Kubb', 'John Doe' ])
+        )
+      end
+    end
+
   end
 end
