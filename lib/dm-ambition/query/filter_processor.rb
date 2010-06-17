@@ -88,11 +88,15 @@ module DataMapper
         end
 
         def process_masgn(exp)
-          eval("#{process(exp.shift).join(', ')} = #{process(exp.shift).inspect}")
+          vars, values = process(exp.shift), process(exp.shift)
+          vars.zip(values) { |var, value| assign_value(var, value) }
+          values
         end
 
         def process_lasgn(exp)
-          assign_value(exp)
+          var = exp.shift
+          return var if exp.empty?
+          assign_value(var, process(exp.shift))
         end
 
         def process_str(exp)
@@ -248,10 +252,8 @@ module DataMapper
           eval("method(#{name.inspect})").call(*args)
         end
 
-        def assign_value(exp)
-          var = exp.shift
-          return var if exp.empty?
-          eval("#{var} = #{process(exp.shift).inspect}")
+        def assign_value(var, value)
+          eval("#{var} = #{value.inspect}")
         end
       end # class FilterProcessor
     end # module Query
