@@ -455,6 +455,68 @@ describe DataMapper::Ambition::Query do
         end
       end
 
+      context 'resource matching a receiver' do
+        before :all do
+          resource = @model.new(:id => 1)
+
+          @return = @subject.filter { |u| resource == u }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:eql, @model.properties[:id], 1)
+          )
+        end
+      end
+
+      context 'receiver matching a non-resource' do
+        before :all do
+          @return = @subject.filter { |u| u == nil }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [])
+          )
+        end
+      end
+
+      context 'non-resource matching a receiver' do
+        before :all do
+          @return = @subject.filter { |u| nil == u }
+        end
+
+        it 'should return a Query' do
+          @return.should be_kind_of(DataMapper::Query)
+        end
+
+        it 'should not return self' do
+          @return.should_not equal(@subject)
+        end
+
+        it 'should set conditions' do
+          @return.conditions.should == DataMapper::Query::Conditions::Operation.new(:and,
+            DataMapper::Query::Conditions::Comparison.new(:in, @model.properties[:id], [])
+          )
+        end
+      end
+
       [ :include?, :member? ].each do |method|
         context "receiver matching a resource using Array##{method}" do
           before :all do

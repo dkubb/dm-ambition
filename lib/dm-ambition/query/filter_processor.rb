@@ -43,7 +43,7 @@ module DataMapper
             operator = rhs.shift
           end
 
-          if lhs.nil?
+          if lhs.nil? && operator != :==
             call_method(operator, *rhs)
           else
             evaluate_operator(operator, lhs, rhs.shift)
@@ -160,13 +160,12 @@ module DataMapper
         end
 
         def evaluate_receiver_source(operator, lhs, rhs)
-          if rhs.nil?
+          if rhs.nil? && @model.properties.named?(operator)
             @model.properties[operator]
-          elsif rhs.kind_of?(DataMapper::Resource) && operator == :==
-            key = @model.key
-            @container << DataMapper::Query.target_conditions(rhs, key, key)
           else
-            raise 'TODO: spec this branch'
+            resources = operator == :== ? [ rhs ] : []
+            key       = @model.key
+            add_condition(DataMapper::Query.target_conditions(resources, key, key))
           end
         end
 
@@ -181,24 +180,21 @@ module DataMapper
               case operator
                 when :include?, :member? then lhs
               end
+            when Resource
+              case operator
+                when :==, :eql? then lhs
+              end
             else
-              raise 'TODO: spec this branch'
+              []
           end
 
           key = @model.key
-          @container << DataMapper::Query.target_conditions(resources, key, key)
+          add_condition(DataMapper::Query.target_conditions(resources, key, key))
         end
 
         def evaluate_property_source(operator, lhs, rhs)
-          bind_value = rhs
-
-          operator = if operator == :nil?
-            :eql
-          else
-            remap_operator(operator)
-          end
-
-          @container << DataMapper::Query::Conditions::Comparison.new(operator, lhs, bind_value)
+          operator = operator == :nil? ? :eql : remap_operator(operator)
+          add_condition(DataMapper::Query::Conditions::Comparison.new(operator, lhs, rhs))
         end
 
         def evaluate_property_target(operator, lhs, rhs)
@@ -228,7 +224,7 @@ module DataMapper
               remap_operator(operator)
           end
 
-          @container << DataMapper::Query::Conditions::Comparison.new(operator, rhs, bind_value)
+          add_condition(DataMapper::Query::Conditions::Comparison.new(operator, rhs, bind_value))
         end
 
         def remap_operator(operator)
@@ -254,6 +250,10 @@ module DataMapper
 
         def assign_value(var, value)
           eval("#{var} = #{value.inspect}")
+        end
+
+        def add_condition(condition)
+          @container << condition
         end
       end # class FilterProcessor
     end # module Query
