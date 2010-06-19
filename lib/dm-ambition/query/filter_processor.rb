@@ -230,13 +230,14 @@ module DataMapper
         def remap_operator(operator)
           # remap Ruby to DM operators
           case operator
-            when :in then :in
             when :== then :eql
             when :=~ then :regexp
             when :>  then :gt
             when :>= then :gte
             when :<  then :lt
             when :<= then :lte
+            else
+              operator
           end
         end
 

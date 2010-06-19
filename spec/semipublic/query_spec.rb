@@ -244,7 +244,7 @@ describe DataMapper::Ambition::Query do
       [ :value?, :has_value? ].each do |method|
         context "Hash##{method}" do
           before :all do
-            @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.value?(u.id) }
+            @return = @subject.filter { |u| { '1' => 1, '2' => 2 }.send(method, u.id) }
           end
 
           it 'should return a Query' do
