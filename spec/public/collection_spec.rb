@@ -39,6 +39,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
           describe "##{method}", '(unloaded)' do
             context 'when matching resource prepended' do
               before :all do
+                @other.update(:admin => true)
                 @subject.unshift(@other)
                 @return = @subject.send(method) { |u| u.admin == true }
               end
@@ -56,7 +57,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
               end
 
               it 'should return expected values' do
-                @return.should == [ @user ]
+                @return.should == [ @other, @user ]
               end
 
               it "should return the same as Array##{method}" do
@@ -66,6 +67,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
             context 'when matching resource appended' do
               before :all do
+                @other.update(:admin => true)
                 @subject << @other
                 @return = @subject.send(method) { |u| u.admin == true }
               end
@@ -83,7 +85,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
               end
 
               it 'should return expected values' do
-                @return.should == [ @user ]
+                @return.should == [ @user, @other ]
               end
 
               it "should return the same as Array##{method}" do
@@ -96,6 +98,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
         describe '#reject', '(unloaded)' do
           context 'when matching resource prepended' do
             before :all do
+              @other.update(:admin => true)
               @subject.unshift(@other)
               @return = @subject.reject { |u| u.admin != true }
             end
@@ -113,7 +116,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should return expected values' do
-              @return.should == [ @user ]
+              @return.should == [ @other, @user ]
             end
 
             it 'should return the same as Array#reject' do
@@ -123,6 +126,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
           context 'when matching resource appended' do
             before :all do
+              @other.update(:admin => true)
               @subject << @other
               @return = @subject.reject { |u| u.admin != true }
             end
@@ -140,7 +144,7 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
             end
 
             it 'should return expected values' do
-              @return.should == [ @user ]
+              @return.should == [ @user, @other ]
             end
 
             it 'should return the same as Array#reject' do

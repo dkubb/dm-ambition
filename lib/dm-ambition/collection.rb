@@ -33,8 +33,8 @@ module DataMapper
         return new_collection(new_query, yield) if loaded?
 
         collection = send(operation, all(new_query))
-        collection.unshift(*head.send(operation, head.select(&block))) if head.any?
-        collection.concat(tail.send(operation, tail.select(&block)))   if tail.any?
+        collection.unshift(*head.send(operation, head.select(&block)))
+        collection.concat(tail.send(operation, tail.select(&block)))
         collection
       end
 
