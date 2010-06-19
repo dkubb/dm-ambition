@@ -236,8 +236,6 @@ module DataMapper
             when :>= then :gte
             when :<  then :lt
             when :<= then :lte
-            else
-              operator
           end
         end
 
