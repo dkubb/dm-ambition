@@ -60,6 +60,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
                 @return.should == [ @other, @user ]
               end
 
+              it 'should include the exact prepended resource' do
+                @return.first.should equal(@other)
+              end
+
               it "should return the same as Array##{method}" do
                 @return.should == @subject.to_a.send(method) { |u| u.admin == true }
               end
@@ -86,6 +90,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
               it 'should return expected values' do
                 @return.should == [ @user, @other ]
+              end
+
+              it 'should include the exact appended resource' do
+                @return.last.should equal(@other)
               end
 
               it "should return the same as Array##{method}" do
@@ -119,6 +127,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
               @return.should == [ @other, @user ]
             end
 
+            it 'should include the exact prepended resource' do
+              @return.first.should equal(@other)
+            end
+
             it 'should return the same as Array#reject' do
               @return.should == @subject.to_a.reject { |u| u.admin != true }
             end
@@ -145,6 +157,10 @@ require Pathname(__FILE__).dirname.expand_path.parent + 'spec_helper'
 
             it 'should return expected values' do
               @return.should == [ @user, @other ]
+            end
+
+            it 'should include the exact appended resource' do
+              @return.last.should equal(@other)
             end
 
             it 'should return the same as Array#reject' do
