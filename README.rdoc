@@ -73,8 +73,11 @@ The simplest way to test is with Bundler since it handles all dependencies:
     # with double-negated conditions
     User.select { |u| !(!(u.id == 1)) }
 
-    # with receiver matching
+    # with matching from receiver
     User.select { |u| u == user }
+
+    # with matching to receiver
+    User.select { |u| user == u }
 
     # using send on receiver
     User.select { |u| u.send(:name) == 'Dan Kubb' }
