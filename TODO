@@ -5,12 +5,6 @@
 
 * Refactor specs to use one spec file per public method
 
-* Changes to dm-core
-  * Update Collection#select in dm-core to return a Collection
-  * Update Collection#reject in dm-core to return a Collection
-  * Update Model#select in dm-core to return a Collection
-  * Update Model#reject in dm-core to return a Collection
-
 * Add to Model and Collection:
   * Add #empty?
   * Add #any?  (handle with and without block)
