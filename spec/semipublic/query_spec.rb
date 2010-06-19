@@ -921,5 +921,14 @@ describe DataMapper::Ambition::Query do
         )
       end
     end
+
+    context 'with an invalid block' do
+      specify do
+        expect {
+          # global assignment will not be allowed within the block
+          @subject.filter { |u| $name = 'Dan Kubb'; u.name == $name }
+        }.to raise_error(ArgumentError, 'calling process_gasgn with s(:$name, s(:str, "Dan Kubb"))')
+      end
+    end
   end
 end
