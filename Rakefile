@@ -17,7 +17,7 @@ begin
 
     gem.version = DataMapper::Ambition::VERSION
 
-    gem.required_ruby_version = '~> 1.8.6'
+    gem.required_ruby_version = '~> 1.8.7'
 
     gem.rubyforge_project = 'dm-ambition'
 
