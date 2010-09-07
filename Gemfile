@@ -71,14 +71,14 @@
 source 'http://rubygems.org'
 
 DATAMAPPER = 'git://github.com/datamapper'
-DM_VERSION = '~> 1.0.0'
+DM_VERSION = '~> 1.0.1'
 
 group :runtime do # Runtime dependencies (as in the gemspec)
 
   if ENV['EXTLIB']
-    gem 'extlib',        '~> 0.9.15',      :git => "#{DATAMAPPER}/extlib.git"
+    gem 'extlib',        '~> 0.9.15', :git => "#{DATAMAPPER}/extlib.git"
   else
-    gem 'activesupport', '~> 3.0.0.beta3', :git => 'git://github.com/rails/rails.git', :require => nil
+    gem 'activesupport', '~> 3.0.0',  :git => 'git://github.com/rails/rails.git', :branch => '3-0-stable', :require => nil
   end
 
   gem 'dm-core',        DM_VERSION, :git => "#{DATAMAPPER}/dm-core.git"
@@ -90,7 +90,7 @@ end
 group(:development) do # Development dependencies (as in the gemspec)
 
   gem 'rake',           '~> 0.8.7'
-  gem 'rspec',          '~> 1.3'
+  gem 'rspec',          '~> 1.3', :git => 'git://github.com/snusnu/rspec', :branch => 'heckle_fix_plus_gemfile'
   gem 'jeweler',        '~> 1.4'
 
 end
@@ -109,32 +109,31 @@ end
 group :datamapper do # We need this because we want to pin these dependencies to their git master sources
 
   adapters = ENV['ADAPTER'] || ENV['ADAPTERS']
-  adapters = adapters.to_s.gsub(',',' ').split(' ') - ['in_memory']
+  adapters = adapters.to_s.tr(',', ' ').split.uniq - %w[ in_memory ]
 
-  unless adapters.empty?
+  DO_VERSION     = '~> 0.10.2'
+  DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 
-    DO_VERSION     = '~> 0.10.3'
-    DM_DO_ADAPTERS = %w[sqlite postgres mysql oracle sqlserver]
+  if (do_adapters = DM_DO_ADAPTERS & adapters).any?
+    options = {}
+    options[:git] = "#{DATAMAPPER}/do.git" if ENV['DO_GIT'] == 'true'
 
-    gem 'data_objects',  DO_VERSION, :git => "#{DATAMAPPER}/do.git"
+    gem 'data_objects',  DO_VERSION, options.dup
 
-    adapters.each do |adapter|
-      if DM_DO_ADAPTERS.any? { |dm_do_adapter| dm_do_adapter =~ /#{adapter}/  }
-        adapter = 'sqlite3' if adapter == 'sqlite'
-        gem "do_#{adapter}", DO_VERSION, :git => "#{DATAMAPPER}/do.git"
-      end
+    do_adapters.each do |adapter|
+      adapter = 'sqlite3' if adapter == 'sqlite'
+      gem "do_#{adapter}", DO_VERSION, options.dup
     end
 
     gem 'dm-do-adapter', DM_VERSION, :git => "#{DATAMAPPER}/dm-do-adapter.git"
+  end
 
-    adapters.each do |adapter|
-      gem "dm-#{adapter}-adapter", DM_VERSION, :git => "#{DATAMAPPER}/dm-#{adapter}-adapter.git"
-    end
-
+  adapters.each do |adapter|
+    gem "dm-#{adapter}-adapter", DM_VERSION, :git => "#{DATAMAPPER}/dm-#{adapter}-adapter.git"
   end
 
   plugins = ENV['PLUGINS'] || ENV['PLUGIN']
-  plugins = (plugins.to_s.gsub(',',' ').split(' ') + ['dm-migrations']).uniq
+  plugins = plugins.to_s.tr(',', ' ').split.push('dm-migrations').uniq
 
   plugins.each do |plugin|
     gem plugin, DM_VERSION, :git => "#{DATAMAPPER}/#{plugin}.git"
