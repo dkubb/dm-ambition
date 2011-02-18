@@ -4,7 +4,7 @@ require 'rake'
 require File.expand_path('../lib/dm-ambition/version', __FILE__)
 
 begin
-  gem 'jeweler', '~> 1.4'
+  gem 'jeweler', '~> 1.5.2'
   require 'jeweler'
 
   Jeweler::Tasks.new do |gem|
@@ -14,6 +14,7 @@ begin
     gem.email       = 'dan.kubb@gmail.com'
     gem.homepage    = 'http://github.com/dkubb/%s' % gem.name
     gem.authors     = [ 'Dan Kubb' ]
+    gem.has_rdoc    = 'yard'
 
     gem.version = DataMapper::Ambition::VERSION
 
@@ -21,11 +22,11 @@ begin
 
     gem.rubyforge_project = 'dm-ambition'
 
-    gem.add_dependency 'dm-core',   '~> 1.0.1'
+    gem.add_dependency 'dm-core',   '~> 1.0.2'
     gem.add_dependency 'ParseTree', '~> 3.0.5' unless defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
     gem.add_dependency 'ruby2ruby', '~> 1.2.2'
 
-    gem.add_development_dependency 'dm-migrations', '~> 1.0.1'
+    gem.add_development_dependency 'dm-migrations', '~> 1.0.2'
     gem.add_development_dependency 'rspec',         '~> 1.3'
   end
 
