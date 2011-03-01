@@ -15,6 +15,7 @@ group :runtime do
   gem 'dm-core',   DM_VERSION, :git => "#{DATAMAPPER}/dm-core.git"
   gem 'ParseTree', '~> 3.0.7', :platforms => :mri_18
   gem 'ruby2ruby', '~> 1.2.5'
+  gem 'sourcify',  '~> 0.4.2'
 
 end
 
