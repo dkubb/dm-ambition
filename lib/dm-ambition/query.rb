@@ -1,5 +1,3 @@
-require 'dm-ambition/query/filter_processor'
-
 module DataMapper
   module Ambition
     module Query
@@ -18,6 +16,7 @@ module DataMapper
 
         self.class.new(repository, model, options.merge(:conditions => conditions & processor.conditions))
       end
+
     end # module Query
   end # module Ambition
 end # module DataMapper

@@ -23,6 +23,7 @@ module DataMapper
       def reject(&block)
         all.reject(&block)
       end
+
     end # module Model
   end # module Ambition
 end # module DataMapper
