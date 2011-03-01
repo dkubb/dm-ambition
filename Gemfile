@@ -35,8 +35,8 @@ platforms :mri_18 do
     gem 'rcov',      '~> 0.9.9'
     gem 'reek',      '~> 1.2.8'
     gem 'roodi',     '~> 2.1'
-    gem 'yard',      '~> 0.5'
-    gem 'yardstick', '~> 0.1'
+    gem 'yard',      '~> 0.6'
+    gem 'yardstick', '~> 0.2'
 
   end
 end

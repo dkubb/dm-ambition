@@ -105,7 +105,7 @@ The simplest way to test is with Bundler since it handles all dependencies:
 
 == License
 
-Copyright (c) 2010 Dan Kubb
+Copyright (c) 2011 Dan Kubb
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
