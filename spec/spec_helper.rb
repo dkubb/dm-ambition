@@ -4,7 +4,7 @@ require 'dm-core/spec/setup'
 require 'dm-core/spec/lib/adapter_helpers'
 require 'dm-core/spec/lib/spec_helper'
 
-Dir['spec/*/shared/**/*.rb'].each { |file| require file }
+Dir['spec/*/shared/**/*.rb'].each { |file| require File.expand_path(file) }
 
 Spec::Runner.configure do |config|
 
