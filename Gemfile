@@ -28,15 +28,17 @@ group :development do
 
 end
 
-group :quality do
+platforms :mri_18 do
+  group :quality do
 
-  gem 'metric_fu', '~> 1.3'
-  gem 'rcov',      '~> 0.9.8', :platforms => :mri_18
-  gem 'reek',      '~> 1.2.8'
-  gem 'roodi',     '~> 2.1'
-  gem 'yard',      '~> 0.5'
-  gem 'yardstick', '~> 0.1'
+    gem 'metric_fu', '~> 1.3'
+    gem 'rcov',      '~> 0.9.9'
+    gem 'reek',      '~> 1.2.8'
+    gem 'roodi',     '~> 2.1'
+    gem 'yard',      '~> 0.5'
+    gem 'yardstick', '~> 0.1'
 
+  end
 end
 
 group :datamapper do
