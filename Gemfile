@@ -31,7 +31,7 @@ end
 group :quality do
 
   gem 'metric_fu', '~> 1.3'
-  gem 'rcov',      '~> 0.9.8'
+  gem 'rcov',      '~> 0.9.8', :platforms => :mri_18
   gem 'reek',      '~> 1.2.8'
   gem 'roodi',     '~> 2.1'
   gem 'yard',      '~> 0.5'
