@@ -166,8 +166,8 @@ module DataMapper
           resources = case lhs
             when Hash
               case operator
-                when :key?, :has_key?, :include?, :member? then lhs.keys
-                when :value?, :has_value?                  then lhs.values
+                when :key?, :has_key?, :include?, :member? then lhs.keys.sort
+                when :value?, :has_value?                  then lhs.values.sort
               end
             when Enumerable
               case operator
@@ -197,10 +197,10 @@ module DataMapper
             when Hash
               case operator
                 when :key?, :has_key?, :include?, :member?
-                  bind_value = bind_value.keys
+                  bind_value = bind_value.keys.sort
                   :in
                 when :value?, :has_value?
-                  bind_value = bind_value.values
+                  bind_value = bind_value.values.sort
                   :in
               end
             when Range
@@ -211,6 +211,7 @@ module DataMapper
             when Enumerable
               case operator
                 when :include?, :member?
+                  bind_value = bind_value.sort
                   :in
               end
             else
