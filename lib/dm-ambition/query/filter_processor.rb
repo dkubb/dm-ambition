@@ -247,6 +247,7 @@ module DataMapper
         def add_condition(condition)
           @container << condition
         end
+
       end # class FilterProcessor
     end # module Query
   end # module Ambition
