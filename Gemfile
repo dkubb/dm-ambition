@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 SOURCE         = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX   = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
-DM_VERSION     = '~> 1.1.0.rc3'
+DM_VERSION     = '~> 1.1.0'
 DO_VERSION     = '~> 0.10.2'
 DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 
@@ -28,8 +28,8 @@ platforms :mri_18 do
     gem 'rcov',      '~> 0.9.9'
     gem 'reek',      '~> 1.2.8'
     gem 'roodi',     '~> 2.1.0'
-    gem 'yard',      '~> 0.6'
-    gem 'yardstick', '~> 0.2'
+    gem 'yard',      '~> 0.6.5'
+    gem 'yardstick', '~> 0.3.0'
 
   end
 end
