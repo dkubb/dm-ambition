@@ -1,20 +1,29 @@
 module DataMapper
   module Ambition
     module Query
-      @@sexps = {}
 
       # TODO: spec and document this
       # @api semipublic
       def filter(&block)
-        # TODO: benchmark Marshal versus just building the sexp on demand
+        processor = FilterProcessor.new(block.binding, model)
+        processor.process(sexp_for(block))
+        self.class.new(repository, model, options.merge(:conditions => conditions & processor.conditions))
+      end
+
+    private
+
+      if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+        # do not deep clone sexp
+        def sexp_for(block)
+          block.to_sexp
+        end
+      else
+        @@sexps = {}
 
         # deep clone the sexp for multiple re-use
-        sexp = Marshal.load(@@sexps[block.to_s] ||= Marshal.dump(block.to_sexp))
-
-        processor = FilterProcessor.new(block.binding, model)
-        processor.process(sexp)
-
-        self.class.new(repository, model, options.merge(:conditions => conditions & processor.conditions))
+        def sexp_for(block)
+          Marshal.load(@@sexps[block.to_s] ||= Marshal.dump(block.to_sexp))
+        end
       end
 
     end # module Query
