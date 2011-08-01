@@ -18,6 +18,8 @@ describe DataMapper::Ambition::Query do
       property :last_name,  String, :key => true
     end
 
+    DataMapper.finalize
+
     if DataMapper.respond_to?(:auto_migrate!)
       DataMapper.auto_migrate!
     end
