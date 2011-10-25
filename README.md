@@ -8,20 +8,20 @@ accessing DataMapper models.
 With Rubygems:
 
 ```bash
-$ gem install veritas
+$ gem install dm-ambition
 $ irb -rubygems
->> require 'veritas'
+>> require 'dm-ambition'
 => true
 ```
 
 With git and local working copy:
 
 ```bash
-$ git clone git://github.com/dkubb/veritas.git
+$ git clone git://github.com/dkubb/dm-ambition.git
 $ cd veritas
 $ rake install
 $ irb -rubygems
->> require 'veritas'
+>> require 'dm-ambition'
 => true
 ```
 
@@ -31,7 +31,7 @@ The simplest way to test is with Bundler since it handles all dependencies:
 
 ```bash
 $ rake local_gemfile
-$ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle install --without=quality --relock
+$ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle
 $ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle exec rake spec
 ```
 
