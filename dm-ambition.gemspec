@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.email = "dan.kubb@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",
-    "README.rdoc",
+    "README.md",
     "TODO"
   ]
   s.files = [
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
     "Gemfile",
     "LICENSE",
     "Manifest.txt",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "TODO",
     "dm-ambition.gemspec",
@@ -64,29 +64,29 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<ParseTree>, ["~> 3.0.7"])
       s.add_runtime_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
       s.add_runtime_dependency(%q<sourcify>, ["~> 0.5.0"])
-      s.add_development_dependency(%q<dm-migrations>, ["~> 1.2.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_development_dependency(%q<rake>, ["~> 0.8.7"])
-      s.add_development_dependency(%q<rspec>, ["~> 1.3.1"])
+      s.add_development_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_development_dependency(%q<rspec>, ["~> 1.3.2"])
+      s.add_development_dependency(%q<yard>, ["~> 0.7.2"])
     else
       s.add_dependency(%q<dm-core>, ["~> 1.2.0"])
       s.add_dependency(%q<ParseTree>, ["~> 3.0.7"])
       s.add_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
       s.add_dependency(%q<sourcify>, ["~> 0.5.0"])
-      s.add_dependency(%q<dm-migrations>, ["~> 1.2.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_dependency(%q<rake>, ["~> 0.8.7"])
-      s.add_dependency(%q<rspec>, ["~> 1.3.1"])
+      s.add_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_dependency(%q<rspec>, ["~> 1.3.2"])
+      s.add_dependency(%q<yard>, ["~> 0.7.2"])
     end
   else
     s.add_dependency(%q<dm-core>, ["~> 1.2.0"])
     s.add_dependency(%q<ParseTree>, ["~> 3.0.7"])
     s.add_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
     s.add_dependency(%q<sourcify>, ["~> 0.5.0"])
-    s.add_dependency(%q<dm-migrations>, ["~> 1.2.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-    s.add_dependency(%q<rake>, ["~> 0.8.7"])
-    s.add_dependency(%q<rspec>, ["~> 1.3.1"])
+    s.add_dependency(%q<rake>, ["~> 0.9.2"])
+    s.add_dependency(%q<rspec>, ["~> 1.3.2"])
+    s.add_dependency(%q<yard>, ["~> 0.7.2"])
   end
 end
 

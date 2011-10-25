@@ -13,29 +13,31 @@ gem 'ruby2ruby', '~> 1.2.5'
 gem 'sourcify',  '~> 0.5.0'
 
 group :development do
-
-  gem 'dm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-migrations#{REPO_POSTFIX}"
-  gem 'jeweler',       '~> 1.6.4'
-  gem 'rake',          '~> 0.8.7'
-  gem 'rspec',         '~> 1.3.1'
-
+  gem 'jeweler', '~> 1.6.4'
+  gem 'rake',    '~> 0.9.2'
+  gem 'rspec',   '~> 1.3.2'
+  gem 'yard',    '~> 0.7.2'
 end
 
 platforms :mri_18 do
-  group :quality do
-
-    gem 'metric_fu', '~> 2.1.0'
-    gem 'rcov',      '~> 0.9.9'
-    gem 'reek',      '~> 1.2.8'
-    gem 'roodi',     '~> 2.1.0'
-    gem 'yard',      '~> 0.6.5'
-    gem 'yardstick', '~> 0.3.0'
-
+  group :metrics do
+    gem 'arrayfields', '~> 4.7.4'
+    gem 'fattr',       '~> 2.2.0'
+    gem 'flay',        '~> 1.4.2'
+    gem 'flog',        '~> 2.5.3'
+    gem 'heckle',      '~> 1.4.3'
+    gem 'json',        '~> 1.6.1'
+    gem 'map',         '~> 4.4.0'
+    gem 'metric_fu',   '~> 2.1.1'
+    gem 'mspec',       '~> 1.5.17'
+    gem 'rcov',        '~> 0.9.9'
+    gem 'reek',        '~> 1.2.8', :git => 'git://github.com/dkubb/reek.git'
+    gem 'roodi',       '~> 2.1.0'
+    gem 'yardstick',   '~> 0.4.0'
   end
 end
 
 group :datamapper do
-
   adapters = ENV['ADAPTER'] || ENV['ADAPTERS']
   adapters = adapters.to_s.tr(',', ' ').split.uniq - %w[ in_memory ]
 
@@ -63,5 +65,4 @@ group :datamapper do
   plugins.each do |plugin|
     gem plugin, DM_VERSION, SOURCE => "#{DATAMAPPER}/#{plugin}#{REPO_POSTFIX}"
   end
-
 end
