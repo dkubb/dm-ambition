@@ -18,7 +18,7 @@ With git and local working copy:
 
 ```bash
 $ git clone git://github.com/dkubb/dm-ambition.git
-$ cd veritas
+$ cd dm-ambition
 $ rake install
 $ irb -rubygems
 >> require 'dm-ambition'
