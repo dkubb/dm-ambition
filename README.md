@@ -37,78 +37,82 @@ $ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle exec rake spec
 
 ## Examples
 
+The standard Enumerable methods `select`, `detect`, `reject`, `find_all`, and
+`find` may be used with dm-ambition. These methods may be applied to the Model
+or Collection object.
+
 ```ruby
 # with == operator
-User.select { |u| u.name == 'Dan Kubb' }
+model_or_collection.select { |u| u.name == 'Dan Kubb' }
 
 # with =~ operator
-User.select { |u| u.name =~ /Dan Kubb/ }
+model_or_collection.select { |u| u.name =~ /Dan Kubb/ }
 
 # with > operator
-User.select { |u| u.id > 1 }
+model_or_collection.select { |u| u.id > 1 }
 
 # with >= operator
-User.select { |u| u.id >= 1 }
+model_or_collection.select { |u| u.id >= 1 }
 
 # with < operator
-User.select { |u| u.id < 1 }
+model_or_collection.select { |u| u.id < 1 }
 
 # with <= operator
-User.select { |u| u.id <= 1 }
+model_or_collection.select { |u| u.id <= 1 }
 
 # with < operator
-User.select { |u| u.id < 1 }
+model_or_collection.select { |u| u.id < 1 }
 
 # with receiver.attribute.nil?
-User.select { |u| u.id.nil? }
+model_or_collection.select { |u| u.id.nil? }
 
 # with nil bind value
-User.select { |u| u.id == nil }
+model_or_collection.select { |u| u.id == nil }
 
 # with true bind value
-User.select { |u| u.admin == true }
+model_or_collection.select { |u| u.admin == true }
 
 # with false bind value
-User.select { |u| u.admin == false }
+model_or_collection.select { |u| u.admin == false }
 
 # with AND conditions
-User.select { |u| u.id == 1 && u.name == 'Dan Kubb' }
+model_or_collection.select { |u| u.id == 1 && u.name == 'Dan Kubb' }
 
 # with negated conditions
-User.select { |u| !(u.id == 1) }
+model_or_collection.select { |u| !(u.id == 1) }
 
 # with double-negated conditions
-User.select { |u| !(!(u.id == 1)) }
+model_or_collection.select { |u| !(!(u.id == 1)) }
 
 # with matching from receiver
-User.select { |u| u == user }
+model_or_collection.select { |u| u == user }
 
 # with matching to receiver
-User.select { |u| user == u }
+model_or_collection.select { |u| user == u }
 
 # using send on receiver
-User.select { |u| u.send(:name) == 'Dan Kubb' }
+model_or_collection.select { |u| u.send(:name) == 'Dan Kubb' }
 
 # with Array#include?
-User.select { |u| user_ids.include?(u.id) }
+model_or_collection.select { |u| user_ids.include?(u.id) }
 
 # with Range#include?
-User.select { |u| (1..10).include?(u.id) }
+model_or_collection.select { |u| (1..10).include?(u.id) }
 
 # with Hash#key?
-User.select { |u| { 1 => 'Dan Kubb' }.key?(u.id) }
+model_or_collection.select { |u| { 1 => 'Dan Kubb' }.key?(u.id) }
 
 # with Hash#value?
-User.select { |u| { 'Dan Kubb' => 1 }.value?(u.id) }
+model_or_collection.select { |u| { 'Dan Kubb' => 1 }.value?(u.id) }
 
 # with receiver and Array#include?
-User.select { |u| users.include?(u) }
+model_or_collection.select { |u| users.include?(u) }
 
 # with receiver and Hash#key?
-User.select { |u| { user => 'Dan Kubb' }.key?(u) }
+model_or_collection.select { |u| { user => 'Dan Kubb' }.key?(u) }
 
 # with receiver and Hash#value?
-User.select { |u| { 'Dan Kubb' => user }.value?(u) }
+model_or_collection.select { |u| { 'Dan Kubb' => user }.value?(u) }
 ```
 
 ## Copyright
