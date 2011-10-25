@@ -4,6 +4,8 @@ module DataMapper
       class FilterProcessor < SexpProcessor
         attr_reader :conditions
 
+        SEND_METHODS = [ :send, :__send__ ].freeze
+
         def initialize(binding, model)
           super()
 
@@ -32,7 +34,7 @@ module DataMapper
           operator = exp.shift
           rhs      = process(exp.shift)
 
-          while [ :send, :__send__ ].include?(operator)
+          while SEND_METHODS.include?(operator)
             operator = rhs.shift
           end
 
