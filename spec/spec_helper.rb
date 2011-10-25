@@ -1,3 +1,5 @@
+ENV['ADAPTER'] ||= 'in_memory'
+
 require 'dm-ambition'
 
 require 'dm-core/spec/setup'
