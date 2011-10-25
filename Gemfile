@@ -1,21 +1,21 @@
-source 'http://rubygems.org'
+source :rubygems
 
 SOURCE         = ENV.fetch('SOURCE', :git).to_sym
 REPO_POSTFIX   = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER     = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
-DM_VERSION     = '~> 1.1.0'
-DO_VERSION     = '~> 0.10.2'
+DM_VERSION     = '~> 1.3.0.beta'
+DO_VERSION     = '~> 0.10.6'
 DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 
 gem 'dm-core',   DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}"
 gem 'ParseTree', '~> 3.0.7', :platforms => :mri_18
 gem 'ruby2ruby', '~> 1.2.5'
-gem 'sourcify',  '~> 0.4.2'
+gem 'sourcify',  '~> 0.5.0'
 
 group :development do
 
   gem 'dm-migrations', DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-migrations#{REPO_POSTFIX}"
-  gem 'jeweler',       '~> 1.5.2'
+  gem 'jeweler',       '~> 1.6.4'
   gem 'rake',          '~> 0.8.7'
   gem 'rspec',         '~> 1.3.1'
 

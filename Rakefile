@@ -4,7 +4,7 @@ require 'rake'
 require File.expand_path('../lib/dm-ambition/version', __FILE__)
 
 begin
-  gem 'jeweler', '~> 1.5.2'
+  gem 'jeweler', '~> 1.6.4'
   require 'jeweler'
 
   Jeweler::Tasks.new do |gem|
