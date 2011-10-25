@@ -33,8 +33,7 @@ The simplest way to test is with Bundler since it handles all dependencies:
 
 ```bash
 $ rake local_gemfile
-$ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle
-$ BUNDLE_GEMFILE="Gemfile.local" ADAPTER="in_memory" bundle exec rake spec
+$ BUNDLE_GEMFILE="Gemfile.local" sh -c "bundle && bundle exec rake spec"
 ```
 
 ## Examples
