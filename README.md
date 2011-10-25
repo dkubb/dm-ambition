@@ -38,9 +38,9 @@ $ BUNDLE_GEMFILE="Gemfile.local" sh -c "bundle && bundle exec rake spec"
 
 ## Examples
 
-The standard Enumerable methods `select`, `detect`, `reject`, `find_all`, and
-`find` may be used with dm-ambition. These methods may be applied to the Model
-or Collection object.
+The standard Enumerable methods `#select`, `#detect`, `#reject`, `#find_all`, and
+`#find` may be used with dm-ambition. These methods may be called on Model
+and Collection objects.
 
 ```ruby
 # with == operator
