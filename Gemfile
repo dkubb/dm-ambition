@@ -19,6 +19,12 @@ group :development do
   gem 'yard',    '~> 0.7.2'
 end
 
+group :guard do
+  gem 'guard',         '~> 0.7.0'
+  gem 'guard-bundler', '~> 0.1.3'
+  gem 'guard-rspec',   '~> 0.4.5'
+end
+
 platforms :mri_18 do
   group :metrics do
     gem 'arrayfields', '~> 4.7.4'
