@@ -3,6 +3,8 @@
 DataMapper::Ambition is a plugin that provides an Ambition-like API for
 accessing DataMapper models.
 
+[![Build Status](https://secure.travis-ci.org/dkubb/dm-ambition.png)](http://travis-ci.org/dkubb/dm-ambition)
+
 ## Installation
 
 With Rubygems:
