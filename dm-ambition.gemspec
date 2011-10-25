@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.files = [
     ".document",
     ".rvmrc",
+    ".travis.yml",
     "Gemfile",
     "LICENSE",
     "Manifest.txt",
@@ -62,7 +63,7 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<dm-core>, ["~> 1.2.0"])
       s.add_runtime_dependency(%q<ParseTree>, ["~> 3.0.7"])
-      s.add_runtime_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
+      s.add_runtime_dependency(%q<ruby2ruby>, ["~> 1.3.1"])
       s.add_runtime_dependency(%q<sourcify>, ["~> 0.5.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
       s.add_development_dependency(%q<rake>, ["~> 0.9.2"])
@@ -71,7 +72,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<dm-core>, ["~> 1.2.0"])
       s.add_dependency(%q<ParseTree>, ["~> 3.0.7"])
-      s.add_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
+      s.add_dependency(%q<ruby2ruby>, ["~> 1.3.1"])
       s.add_dependency(%q<sourcify>, ["~> 0.5.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
       s.add_dependency(%q<rake>, ["~> 0.9.2"])
@@ -81,7 +82,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<dm-core>, ["~> 1.2.0"])
     s.add_dependency(%q<ParseTree>, ["~> 3.0.7"])
-    s.add_dependency(%q<ruby2ruby>, ["~> 1.2.5"])
+    s.add_dependency(%q<ruby2ruby>, ["~> 1.3.1"])
     s.add_dependency(%q<sourcify>, ["~> 0.5.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
     s.add_dependency(%q<rake>, ["~> 0.9.2"])

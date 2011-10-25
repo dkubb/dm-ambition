@@ -9,7 +9,7 @@ DM_DO_ADAPTERS = %w[ sqlite postgres mysql oracle sqlserver ]
 
 gem 'dm-core',   DM_VERSION, SOURCE => "#{DATAMAPPER}/dm-core#{REPO_POSTFIX}"
 gem 'ParseTree', '~> 3.0.7', :platforms => :mri_18
-gem 'ruby2ruby', '~> 1.2.5'
+gem 'ruby2ruby', '~> 1.3.1'
 gem 'sourcify',  '~> 0.5.0'
 
 group :development do
